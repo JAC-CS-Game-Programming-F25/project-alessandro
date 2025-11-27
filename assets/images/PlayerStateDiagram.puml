@@ -1,0 +1,18 @@
+@startuml PlayerStateMachine
+
+hide empty description
+skinparam monochrome true
+
+state "IdleState" as Idle
+state "WalkingState" as Walking
+state "CrouchingState" as Crouching
+
+[*] --> Idle
+
+Idle --> Walking: WASD Pressed
+Walking --> Idle: WASD Released
+Walking --> Crouching: Shift Pressed
+Crouching --> Walking: Shift Released
+Crouching --> Idle: WASD Released
+
+@enduml

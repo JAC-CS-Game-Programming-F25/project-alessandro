@@ -1,0 +1,24 @@
+@startuml GuardStateMachine
+
+hide empty description
+skinparam monochrome true
+
+state "Patrol Guard" as PG {
+    state "PatrolState" as Patrol
+    state "AlertState" as Alert1
+    
+    [*] --> Patrol
+    Patrol --> Alert1: Player Detected
+    Alert1 --> Patrol: Level Restarted
+}
+
+state "Stationary Guard" as SG {
+    state "IdleState" as Idle
+    state "AlertState" as Alert2
+    
+    [*] --> Idle
+    Idle --> Alert2: Player Detected
+    Alert2 --> Idle: Level Restarted
+}
+
+@enduml
