@@ -133,7 +133,6 @@ Guard <|-- PatrolGuard
 Guard <|-- StationaryGuard
 
 Level "1" -- "*" Guard
-Level "1" -- "*" Camera
 Level "1" -- "*" Item
 Level "1" -- "1" Exit
 
