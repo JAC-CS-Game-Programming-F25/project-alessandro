@@ -7,11 +7,9 @@ state "TitleScreenState" as TSS
 state "InstructionsState" as IS
 state "PlayState" as PS
 state "PauseState" as PAS
-state "LevelCompleteState" as LCS
 state "VictoryState" as VS
 state "GameOverState" as GOS
 state Menu <<choice>>
-state PlayAgain <<choice>>
 
 [*] --> TSS
 
@@ -19,19 +17,16 @@ TSS --> Menu
 Menu --> IS: Instructions
 Menu --> PS: Play
 
+IS --> TSS: Return to Menu
+
 PS --> PAS: Press ESC
 PAS --> PS: Press ESC
+PAS --> TSS: Quit to Menu
 
-PS --> LCS: Quota Met + Exit Reached
+PS --> VS: Quota Met + Exit Reached
 PS --> GOS: Caught or Time Expired
 
-LCS --> PlayAgain: Continue?
-GOS --> PlayAgain: Retry?
-
-PlayAgain --> TSS: Return to Menu
-PlayAgain --> PS: Next Level / Retry
-
-LCS --> VS: All Levels Complete
+GOS --> PS: Press Enter (Retry)
 
 VS --> TSS: Return to Menu
 

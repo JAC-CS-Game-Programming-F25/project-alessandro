@@ -14,10 +14,14 @@ state "Patrol Guard" as PG {
 
 state "Stationary Guard" as SG {
     state "IdleState" as Idle
+    state "RotatingState" as Rotating
     state "AlertState" as Alert2
     
     [*] --> Idle
+    Idle --> Rotating: Start Rotation
+    Rotating --> Idle: Stop Rotation
     Idle --> Alert2: Player Detected
+    Rotating --> Alert2: Player Detected
     Alert2 --> Idle: Level Restarted
 }
 

@@ -1,0 +1,194 @@
+@startuml ClassDiagram
+
+skinparam monochrome true
+hide empty members
+
+class Game {
+    stateMachine: StateMachine
+    soundManager: SoundManager
+    update()
+    render()
+}
+
+class State {
+    <<abstract>>
+    enter()
+    exit()
+    update()
+    render()
+}
+
+class TitleScreenState
+class InstructionsState
+class PlayState {
+    level: Level
+    player: Player
+    timer: Timer
+    checkWinCondition()
+    checkLoseCondition()
+}
+class PauseState
+class VictoryState
+class GameOverState
+
+State <|-- TitleScreenState
+State <|-- InstructionsState
+State <|-- PlayState
+State <|-- PauseState
+State <|-- VictoryState
+State <|-- GameOverState
+
+Game "1" -- "*" State
+Game "1" -- "1" StateMachine
+
+class Level {
+    tileMap: TileMap
+    guards: Guard[]
+    cameras: Camera[]
+    items: Item[]
+    exit: Exit
+    quota: number
+    timeLimit: number
+    update()
+    render()
+}
+
+class TileMap {
+    bottomLayer: Layer
+    collisionLayer: Layer
+    objectLayer: Layer
+    topLayer: Layer
+    tileSize: number
+    width: number
+    height: number
+    render()
+    isTileWalkable(x, y)
+}
+
+class Layer {
+    tiles: Tile[]
+    width: number
+    height: number
+    layerType: LayerType
+    render()
+    getTile(x, y)
+}
+
+class Tile {
+    id: number
+    sprite: Sprite
+    isWalkable: boolean
+    position: Vector
+    render()
+}
+
+PlayState "1" -- "1" Level
+PlayState "1" -- "1" Player
+
+Level "1" -- "1" TileMap
+TileMap "1" -- "4" Layer
+Layer "1" -- "*" Tile
+
+class Entity {
+    <<abstract>>
+    position: Vector
+    velocity: Vector
+    hitbox: Hitbox
+    sprite: Sprite
+    stateMachine: StateMachine
+    animations: Animation[]
+    update()
+    render()
+}
+
+class Player {
+    speed: number
+    crouchSpeed: number
+    detectionMultiplier: number
+    money: number
+    isCrouching: boolean
+    checkTileCollision()
+}
+
+class Guard {
+    <<abstract>>
+    visionCone: VisionCone
+    detectionRange: number
+    checkPlayerDetection()
+}
+
+class PatrolGuard {
+    waypoints: Waypoint[]
+    currentWaypoint: number
+    moveSpeed: number
+    patrol()
+}
+
+class StationaryGuard {
+    rotationSpeed: number
+    rotationAngle: number
+    rotate()
+}
+
+Entity <|-- Player
+Entity <|-- Guard
+Guard <|-- PatrolGuard
+Guard <|-- StationaryGuard
+
+Level "1" -- "*" Guard
+Level "1" -- "*" Camera
+Level "1" -- "*" Item
+Level "1" -- "1" Exit
+
+class GuardFactory {
+    createPatrolGuard()
+    createStationaryGuard()
+}
+
+class ItemFactory {
+    createItem(type: ItemType)
+}
+
+GuardFactory ..> Guard : creates
+ItemFactory ..> Item : creates
+
+class Camera {
+    position: Vector
+    visionCone: VisionCone
+    sweepSpeed: number
+    sprite: Sprite
+    checkPlayerDetection()
+}
+
+class Item {
+    value: number
+    type: ItemType
+    sprite: Sprite
+    hitbox: Hitbox
+    isCollected: boolean
+}
+
+class Exit {
+    isUnlocked: boolean
+    sprite: Sprite
+    hitbox: Hitbox
+    checkPlayerEntry()
+}
+
+class VisionCone {
+    angle: number
+    range: number
+    direction: number
+    hitbox: Hitbox
+    render()
+}
+
+class Waypoint {
+    position: Vector
+}
+
+Guard "1" -- "1" VisionCone
+Camera "1" -- "1" VisionCone
+PatrolGuard "1" -- "*" Waypoint
+
+@enduml
