@@ -287,6 +287,18 @@ The main game interface showing active gameplay:
     -   Time remaining when caught
 -   "Press ENTER to retry level"
 
+### Pause Screen
+
+![Pause Screen](./assets/images/PauseScreen.png)
+
+-   Translucent black overlay over game
+-   "PAUSED" title with green glow
+-   Menu options:
+    -   Resume Game (ESC key)
+    -   Quit to Menu (Q key)
+-   Decorative corner brackets
+-   Auto-save indicator at bottom
+
 ## 🎨 Assets
 
 ### 🖼️ Images & Sprites

@@ -5,7 +5,6 @@ hide empty members
 
 class Game {
     stateMachine: StateMachine
-    soundManager: SoundManager
     update()
     render()
 }
@@ -23,7 +22,6 @@ class InstructionsState
 class PlayState {
     level: Level
     player: Player
-    timer: Timer
     checkWinCondition()
     checkLoseCondition()
 }
@@ -44,7 +42,6 @@ Game "1" -- "1" StateMachine
 class Level {
     tileMap: TileMap
     guards: Guard[]
-    cameras: Camera[]
     items: Item[]
     exit: Exit
     quota: number
@@ -152,14 +149,6 @@ class ItemFactory {
 GuardFactory ..> Guard : creates
 ItemFactory ..> Item : creates
 
-class Camera {
-    position: Vector
-    visionCone: VisionCone
-    sweepSpeed: number
-    sprite: Sprite
-    checkPlayerDetection()
-}
-
 class Item {
     value: number
     type: ItemType
@@ -188,7 +177,6 @@ class Waypoint {
 }
 
 Guard "1" -- "1" VisionCone
-Camera "1" -- "1" VisionCone
 PatrolGuard "1" -- "*" Waypoint
 
 @enduml
