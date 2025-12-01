@@ -22,6 +22,7 @@ class InstructionsState
 class PlayState {
     level: Level
     player: Player
+    timer: Timer
     checkWinCondition()
     checkLoseCondition()
 }
@@ -141,12 +142,15 @@ class GuardFactory {
     createStationaryGuard()
 }
 
-class ItemFactory {
-    createItem(type: ItemType)
-}
-
 GuardFactory ..> Guard : creates
-ItemFactory ..> Item : creates
+
+class Camera {
+    position: Vector
+    visionCone: VisionCone
+    sweepSpeed: number
+    sprite: Sprite
+    checkPlayerDetection()
+}
 
 class Item {
     value: number
