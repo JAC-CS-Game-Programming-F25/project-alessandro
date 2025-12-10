@@ -1,22 +1,15 @@
 import Animation from "../../../lib/Animation.js";
 import State from "../../../lib/State.js";
-import Player from "../../entities/Player.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import Input from "../../../lib/Input.js";
-import { input, timer } from "../../globals.js";
+import { input } from "../../globals.js";
 import Tile from "../../services/Tile.js";
-import Easing from "../../../lib/Easing.js";
+import GameEntity from "../../entities/GameEntity.js";
 
 export default class PlayerWalkingState extends State {
     static WALK_ANIMATION_TIME = 0.1;
-    /**
-     * In this state, the player can move around using the
-     * directional keys. From here, the player can go idle
-     * if no keys are being pressed.
-     *
-     * @param {Player} player
-     */
+
     constructor(player) {
         super();
 
@@ -42,8 +35,6 @@ export default class PlayerWalkingState extends State {
                 PlayerWalkingState.WALK_ANIMATION_TIME
             ),
         };
-
-        this.isMoving = false;
     }
 
     enter() {
@@ -53,21 +44,15 @@ export default class PlayerWalkingState extends State {
 
     update(dt) {
         this.player.currentAnimation = this.animation[this.player.direction];
-
-        this.handleMovement();
+        this.handleMovement(dt);
     }
 
-    handleMovement() {
-        /**
-         * Unlike Zelda, the Player's movement in Pokemon is locked to
-         * the grid. To restrict them from moving freely, we set a flag
-         * to track if they're currently moving from one tile to another,
-         * and reject input if so.
-         */
-        if (this.isMoving) {
-            return;
-        }
+    handleMovement(dt) {
+        // Reset velocity
+        this.player.velocity.x = 0;
+        this.player.velocity.y = 0;
 
+        // Check if no keys are pressed
         if (
             !input.isKeyHeld(Input.KEYS.W) &&
             !input.isKeyHeld(Input.KEYS.A) &&
@@ -78,72 +63,86 @@ export default class PlayerWalkingState extends State {
             return;
         }
 
-        this.updateDirection();
-        this.move();
+        this.setVelocity();
+        this.normalizeDiagonalMovement();
+
+        // Calculate next position
+        const nextX =
+            this.player.canvasPosition.x + this.player.velocity.x * dt;
+        const nextY =
+            this.player.canvasPosition.y + this.player.velocity.y * dt;
+
+        // Check collision and adjust velocity
+        if (this.willCollide(nextX, this.player.canvasPosition.y)) {
+            this.player.velocity.x = 0;
+        }
+
+        if (this.willCollide(this.player.canvasPosition.x, nextY)) {
+            this.player.velocity.y = 0;
+        }
     }
 
-    updateDirection() {
-        if (input.isKeyHeld(Input.KEYS.S)) {
-            this.player.direction = Direction.Down;
-        } else if (input.isKeyHeld(Input.KEYS.D)) {
-            this.player.direction = Direction.Right;
-        } else if (input.isKeyHeld(Input.KEYS.W)) {
+    setVelocity() {
+        if (input.isKeyHeld(Input.KEYS.W)) {
+            this.player.velocity.y = -this.player.speed;
             this.player.direction = Direction.Up;
-        } else if (input.isKeyHeld(Input.KEYS.A)) {
+        }
+        if (input.isKeyHeld(Input.KEYS.S)) {
+            this.player.velocity.y = this.player.speed;
+            this.player.direction = Direction.Down;
+        }
+        if (input.isKeyHeld(Input.KEYS.A)) {
+            this.player.velocity.x = -this.player.speed;
             this.player.direction = Direction.Left;
         }
+        if (input.isKeyHeld(Input.KEYS.D)) {
+            this.player.velocity.x = this.player.speed;
+            this.player.direction = Direction.Right;
+        }
     }
 
-    move() {
-        let x = this.player.position.x;
-        let y = this.player.position.y;
-
-        switch (this.player.direction) {
-            case Direction.Up:
-                y--;
-                break;
-            case Direction.Down:
-                y++;
-                break;
-            case Direction.Left:
-                x--;
-                break;
-            case Direction.Right:
-                x++;
-                break;
+    normalizeDiagonalMovement() {
+        if (this.player.velocity.x !== 0 && this.player.velocity.y !== 0) {
+            const length = Math.hypot(
+                this.player.velocity.x,
+                this.player.velocity.y
+            );
+            this.player.velocity.x =
+                (this.player.velocity.x / length) * this.player.speed;
+            this.player.velocity.y =
+                (this.player.velocity.y / length) * this.player.speed;
         }
-
-        if (!this.isValidMove(x, y)) {
-            return;
-        }
-
-        this.player.position.x = x;
-        this.player.position.y = y;
-
-        this.tweenMovement(x, y);
-    }
-
-    tweenMovement(x, y) {
-        this.isMoving = true;
-
-        timer.tween(
-            this.player.canvasPosition,
-            { x: x * Tile.SIZE, y: y * Tile.SIZE },
-            0.25,
-            Easing.linear,
-            () => {
-                this.isMoving = false;
-                this.updateDirection();
-            }
-        );
     }
 
     /**
-     * @param {number} x
-     * @param {number} y
-     * @returns Whether the player is going to move on to a non-collidable tile.
+     * Check if the player's hitbox will collide with any collision tiles
+     * @param {number} x - Next X position in pixels
+     * @param {number} y - Next Y position in pixels
+     * @returns {boolean} - True if collision detected
      */
-    isValidMove(x, y) {
-        return this.collisionLayer.getTile(x, y) === null;
+    willCollide(x, y) {
+        // Define player hitbox (adjust these based on your sprite)
+        const hitboxOffsetX = 4;
+        const hitboxOffsetY = GameEntity.HEIGHT / 4;
+        const hitboxWidth = 24;
+        const hitboxHeight = 16;
+
+        // Get the four corners of the hitbox
+        const left = Math.floor((x + hitboxOffsetX) / Tile.SIZE);
+        const right = Math.floor(
+            (x + hitboxOffsetX + hitboxWidth - 1) / Tile.SIZE
+        );
+        const top = Math.floor((y + hitboxOffsetY) / Tile.SIZE);
+        const bottom = Math.floor(
+            (y + hitboxOffsetY + hitboxHeight - 1) / Tile.SIZE
+        );
+
+        // Check if any corner is in a collision tile
+        return (
+            this.collisionLayer.getTile(left, top) !== null ||
+            this.collisionLayer.getTile(right, top) !== null ||
+            this.collisionLayer.getTile(left, bottom) !== null ||
+            this.collisionLayer.getTile(right, bottom) !== null
+        );
     }
 }

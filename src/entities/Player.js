@@ -8,6 +8,7 @@ import Sprite from "../../lib/Sprite.js";
 import Vector from "../../lib/Vector.js";
 import Character from "../enums/Character.js";
 import Map from "../services/Map.js";
+import Tile from "../services/Tile.js";
 
 export default class Player extends GameEntity {
     /**
@@ -22,6 +23,10 @@ export default class Player extends GameEntity {
 
         this.map = map;
         this.dimensions = new Vector(GameEntity.WIDTH, GameEntity.HEIGHT);
+
+        this.velocity = new Vector(0, 0);
+        this.speed = 100;
+
         this.stateMachine = this.initializeStateMachine();
 
         this.idleSprites = this.initializeSprites(Character.ThiefIdle);
@@ -34,8 +39,14 @@ export default class Player extends GameEntity {
 
     update(dt) {
         super.update(dt);
-        this.currentAnimation.update(dt);
 
+        this.canvasPosition.x += this.velocity.x * dt;
+        this.canvasPosition.y += this.velocity.y * dt;
+
+        this.position.x = Math.floor(this.canvasPosition.x / Tile.SIZE);
+        this.position.y = Math.floor(this.canvasPosition.y / Tile.SIZE);
+
+        this.currentAnimation.update(dt);
         this.currentFrame = this.currentAnimation.getCurrentFrame();
     }
 
