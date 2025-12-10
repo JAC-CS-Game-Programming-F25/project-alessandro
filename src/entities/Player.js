@@ -9,6 +9,7 @@ import Vector from "../../lib/Vector.js";
 import Character from "../enums/Character.js";
 import Map from "../services/Map.js";
 import Tile from "../services/Tile.js";
+import PlayerCrouchingState from "../states/player/PlayerCrouchingState.js";
 
 export default class Player extends GameEntity {
     /**
@@ -26,11 +27,12 @@ export default class Player extends GameEntity {
 
         this.velocity = new Vector(0, 0);
         this.speed = 100;
+        this.isCrouching = false;
 
         this.stateMachine = this.initializeStateMachine();
 
         this.idleSprites = this.initializeSprites(Character.ThiefIdle);
-        this.walkSprites = this.initializeSprites(Character.ThiefWalk);
+		this.walkSprites = this.initializeSprites(Character.ThiefWalk);
 
         this.sprites = this.idleSprites;
         this.currentAnimation =
@@ -68,6 +70,10 @@ export default class Player extends GameEntity {
 
         stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
         stateMachine.add(PlayerStateName.Idling, new PlayerIdlingState(this));
+        stateMachine.add(
+            PlayerStateName.Crouching,
+            new PlayerCrouchingState(this)
+        );
 
         stateMachine.change(PlayerStateName.Idling);
 
