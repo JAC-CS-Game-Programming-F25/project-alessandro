@@ -10,8 +10,8 @@ export const context =
 	canvas.getContext('2d') || new CanvasRenderingContext2D();
 
 // Replace these values according to how big you want your canvas.
-export const CANVAS_WIDTH = 0;
-export const CANVAS_HEIGHT = 0;
+export const CANVAS_WIDTH = 512;
+export const CANVAS_HEIGHT = 704;
 
 const resizeCanvas = () => {
 	const scaleX = window.innerWidth / CANVAS_WIDTH;
@@ -34,3 +34,5 @@ export const stateMachine = new StateMachine();
 export const timer = new Timer();
 export const input = new Input(canvas);
 export const sounds = new Sounds();
+
+export const DEBUG = false;

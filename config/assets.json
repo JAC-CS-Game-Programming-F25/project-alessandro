@@ -1,0 +1,24 @@
+{
+    "images": [
+        {
+            "name": "museum-entrance",
+            "path": "./assets/images/museum-entrance.png",
+            "width": 512,
+            "height": 704
+        },
+        {
+            "name": "thief-idle",
+            "path": "./assets/images/thief-idle.png",
+            "width": 768,
+            "height": 64
+        },
+        {
+            "name": "thief-walk",
+            "path": "./assets/images/thief-walk.png",
+            "width": 768,
+            "height": 64
+        }
+    ],
+    "fonts": [],
+    "sounds": []
+}
