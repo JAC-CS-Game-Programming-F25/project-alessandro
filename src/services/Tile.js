@@ -1,19 +1,23 @@
 export default class Tile {
-	static SIZE = 32;
-	static GRASS = 6;
+    static SIZE = 32;
 
-	/**
-	 * Represents one tile in a Layer and on the screen.
-	 *
-	 * @param {number} id
-	 * @param {array} sprites
-	 */
-	constructor(id, sprites) {
-		this.sprites = sprites;
-		this.id = id;
-	}
+    /**
+     * Represents one tile in a Layer and on the screen.
+     *
+     * @param {number} id - The global tile ID from Tiled
+     * @param {array} sprites - Array of all sprites indexed by tile ID
+     */
+    constructor(id, sprites) {
+        this.sprites = sprites;
+        this.id = id;
+    }
 
-	render(x, y) {
-		this.sprites[this.id].render(x * Tile.SIZE, y * Tile.SIZE);
-	}
+    render(x, y) {
+        // Use the tile ID directly to index into the sprite array
+        const sprite = this.sprites[this.id];
+
+        if (sprite) {
+            sprite.render(x * Tile.SIZE, y * Tile.SIZE);
+        }
+    }
 }

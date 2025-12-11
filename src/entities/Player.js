@@ -19,10 +19,10 @@ export default class Player extends GameEntity {
      * @param {object} entityDefinition
      * @param {Map} map
      */
-    constructor(entityDefinition = {}, map) {
+    constructor(entityDefinition = {}, level) {
         super(entityDefinition);
 
-        this.map = map;
+        this.level = level;
         this.dimensions = new Vector(GameEntity.WIDTH, GameEntity.HEIGHT);
 
         this.velocity = new Vector(0, 0);

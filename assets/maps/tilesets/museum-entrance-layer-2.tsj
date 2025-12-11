@@ -1,0 +1,14 @@
+{ "columns":16,
+ "image":"..\/..\/images\/room-tilesets\/Museum_entrance_layer_2_32x32.png",
+ "imageheight":704,
+ "imagewidth":512,
+ "margin":0,
+ "name":"museum-entrance-layer-2",
+ "spacing":0,
+ "tilecount":352,
+ "tiledversion":"1.11.2",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":"1.10"
+}

@@ -16,8 +16,8 @@ export default class PlayerMovingState extends State {
 
         this.player = player;
         this.speed = speed;
-        this.bottomLayer = this.player.map.bottomLayer;
-        this.collisionLayer = this.player.map.collisionLayer;
+        this.bottomLayer = this.player.level.currentRoom.floorLayer;
+        this.collisionLayer = this.player.level.collisionLayer;
 
         this.animation = {
             [Direction.Up]: new Animation([6, 7, 8, 9, 10, 11], animationTime),

@@ -1,18 +1,30 @@
 import State from "../../../lib/State.js";
-import Map from "../../services/Map.js";
+import Level from "../../services/Level.js";
+import RoomName from "../../enums/RoomName.js";
+import Vector from "../../../lib/Vector.js";
 
 export default class PlayState extends State {
-    constructor(mapDefinition) {
+    constructor() {
         super();
+        this.level = new Level();
+    }
 
-        this.map = new Map(mapDefinition);
+    async enter() {
+        // Load all rooms
+        await this.level.loadRoom(
+            RoomName.MuseumEntrance,
+            "../../config/museum-entrance.json"
+        );
+
+        // Start in the entrance
+        this.level.setCurrentRoom(RoomName.MuseumEntrance, new Vector(13, 16));
     }
 
     update(dt) {
-        this.map.update(dt);
+        this.level.update(dt);
     }
 
     render() {
-        this.map.render();
+        this.level.render();
     }
 }

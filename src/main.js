@@ -1,13 +1,3 @@
-/**
- * Game Name
- *
- * Authors
- *
- * Brief description
- *
- * Asset sources
- */
-
 import GameStateName from "./enums/GameStateName.js";
 import Game from "../lib/Game.js";
 import {
@@ -29,9 +19,8 @@ import TitleScreenState from "./states/game/TitleScreenState.js";
 // Set the dimensions of the play area.
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
-canvas.setAttribute("tabindex", "1"); // Allows the canvas to receive user input.
+canvas.setAttribute("tabindex", "1");
 
-// Now that the canvas element has been prepared, we can add it to the DOM.
 document.body.appendChild(canvas);
 
 // Fetch the asset definitions from assets.json.
@@ -41,9 +30,8 @@ const {
     sounds: soundDefinitions,
 } = await fetch("./config/assets.json").then((response) => response.json());
 
-const mapDefinition = await fetch("./config/map.json").then((response) =>
-    response.json()
-);
+// Remove this line - we don't need it anymore
+// const mapDefinition = await fetch("./config/map.json").then((response) => response.json());
 
 // Load all the assets from their definitions.
 images.load(imageDefinitions);
@@ -54,7 +42,7 @@ sounds.load(soundDefinitions);
 stateMachine.add(GameStateName.TitleScreen, new TitleScreenState());
 stateMachine.add(GameStateName.GameOver, new GameOverState());
 stateMachine.add(GameStateName.Victory, new VictoryState());
-stateMachine.add(GameStateName.Play, new PlayState(mapDefinition));
+stateMachine.add(GameStateName.Play, new PlayState()); // No parameter needed now
 
 stateMachine.change(GameStateName.Play);
 
@@ -68,5 +56,4 @@ const game = new Game(
 
 game.start();
 
-// Focus the canvas so that the player doesn't have to click on it.
 canvas.focus();
