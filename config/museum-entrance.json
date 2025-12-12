@@ -167,8 +167,8 @@
          "name":"Collectible-Items",
          "objects":[
                 {
-                 "height":44.3636,
-                 "id":10,
+                 "height":44,
+                 "id":19,
                  "name":"",
                  "properties":[
                         {
@@ -179,13 +179,30 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":60.1818,
-                 "x":257.818,
-                 "y":35.6364
+                 "width":59.8181818181818,
+                 "x":258,
+                 "y":36
+                }, 
+                {
+                 "height":36,
+                 "id":20,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"artifact"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":41,
+                 "x":139.333333333333,
+                 "y":57.6666666666667
                 }, 
                 {
                  "height":35.5,
-                 "id":11,
+                 "id":21,
                  "name":"",
                  "properties":[
                         {
@@ -196,13 +213,13 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":38.5,
-                 "x":429,
-                 "y":280.5
+                 "width":40,
+                 "x":332,
+                 "y":184.5
                 }, 
                 {
-                 "height":35.5,
-                 "id":12,
+                 "height":36.1818181818182,
+                 "id":22,
                  "name":"",
                  "properties":[
                         {
@@ -213,26 +230,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":39.5,
-                 "x":397,
-                 "y":56.5
-                }, 
-                {
-                 "height":33.3333,
-                 "id":13,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"artifact"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":20,
-                 "x":166,
-                 "y":284
+                 "width":39.8181818181818,
+                 "x":428.363636363636,
+                 "y":280.181818181818
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -307,7 +307,7 @@
          "y":0
         }],
  "nextlayerid":10,
- "nextobjectid":18,
+ "nextobjectid":23,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

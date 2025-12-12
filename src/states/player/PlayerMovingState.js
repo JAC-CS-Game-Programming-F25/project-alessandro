@@ -7,10 +7,6 @@ import Tile from "../../services/Tile.js";
 import GameEntity from "../../entities/GameEntity.js";
 
 export default class PlayerMovingState extends State {
-    /**
-     * Base class for player movement states (Walking, Crouching)
-     * Handles all the common movement logic
-     */
     constructor(player, speed, animationTime) {
         super();
 
@@ -41,7 +37,10 @@ export default class PlayerMovingState extends State {
     update(dt) {
         this.player.currentAnimation = this.animation[this.player.direction];
 
-        // Let subclasses handle state transitions
+        if (input.isKeyPressed(Input.KEYS.E)) {
+            this.handleInteraction();
+        }
+
         if (this.shouldChangeState()) {
             return;
         }
@@ -50,19 +49,34 @@ export default class PlayerMovingState extends State {
     }
 
     /**
-     * Override this in subclasses to handle state transitions
-     * Return true if state changed, false otherwise
+     * Handle E key interaction with items
      */
+    handleInteraction() {
+        const room = this.player.level.currentRoom;
+
+        if (room.interactableManager.canInteract()) {
+            const itemData = room.interactableManager.collect();
+
+            if (itemData) {
+                // Add money to level
+                this.player.level.moneyCollected += itemData.value;
+                console.log(
+                    `Stole ${itemData.type} worth $${itemData.value}! Total: $${this.player.level.moneyCollected}`
+                );
+
+                // TODO: Play steal sound/animation
+            }
+        }
+    }
+
     shouldChangeState() {
         return false;
     }
 
     handleMovement(dt) {
-        // Reset velocity
         this.player.velocity.x = 0;
         this.player.velocity.y = 0;
 
-        // Check if no movement keys are pressed
         const isMoving =
             input.isKeyHeld(Input.KEYS.W) ||
             input.isKeyHeld(Input.KEYS.A) ||
@@ -74,26 +88,6 @@ export default class PlayerMovingState extends State {
             return;
         }
 
-        this.setVelocity();
-        this.normalizeDiagonalMovement();
-
-        // Calculate next position
-        const nextX =
-            this.player.canvasPosition.x + this.player.velocity.x * dt;
-        const nextY =
-            this.player.canvasPosition.y + this.player.velocity.y * dt;
-
-        // Check collision and adjust velocity
-        if (this.willCollide(nextX, this.player.canvasPosition.y)) {
-            this.player.velocity.x = 0;
-        }
-
-        if (this.willCollide(this.player.canvasPosition.x, nextY)) {
-            this.player.velocity.y = 0;
-        }
-    }
-
-    setVelocity() {
         if (input.isKeyHeld(Input.KEYS.W)) {
             this.player.velocity.y = -this.speed;
             this.player.direction = Direction.Up;
@@ -110,9 +104,7 @@ export default class PlayerMovingState extends State {
             this.player.velocity.x = this.speed;
             this.player.direction = Direction.Right;
         }
-    }
 
-    normalizeDiagonalMovement() {
         if (this.player.velocity.x !== 0 && this.player.velocity.y !== 0) {
             const length = Math.hypot(
                 this.player.velocity.x,
@@ -123,18 +115,25 @@ export default class PlayerMovingState extends State {
             this.player.velocity.y =
                 (this.player.velocity.y / length) * this.speed;
         }
+
+        const nextX =
+            this.player.canvasPosition.x + this.player.velocity.x * dt;
+        const nextY =
+            this.player.canvasPosition.y + this.player.velocity.y * dt;
+
+        if (this.willCollide(nextX, this.player.canvasPosition.y)) {
+            this.player.velocity.x = 0;
+        }
+
+        if (this.willCollide(this.player.canvasPosition.x, nextY)) {
+            this.player.velocity.y = 0;
+        }
     }
 
-    /**
-     * Override this in subclasses to handle what happens when no movement input is detected
-     */
     onNoInput() {
-        // Default: do nothing (stay in current state)
+        // Default: do nothing
     }
 
-    /**
-     * Check if the player's hitbox will collide with any collision tiles
-     */
     willCollide(x, y) {
         const hitboxOffsetX = 4;
         const hitboxOffsetY = GameEntity.HEIGHT / 4;
@@ -150,11 +149,12 @@ export default class PlayerMovingState extends State {
             (y + hitboxOffsetY + hitboxHeight - 1) / Tile.SIZE
         );
 
-        return (
+        const hasCollision =
             this.collisionLayer.getTile(left, top) !== null ||
             this.collisionLayer.getTile(right, top) !== null ||
             this.collisionLayer.getTile(left, bottom) !== null ||
-            this.collisionLayer.getTile(right, bottom) !== null
-        );
+            this.collisionLayer.getTile(right, bottom) !== null;
+
+        return hasCollision;
     }
 }

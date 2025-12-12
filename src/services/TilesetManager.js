@@ -28,11 +28,6 @@ export default class TilesetManager {
      * @returns {array} Array of sprites indexed by global tile ID
      */
     loadSpritesForRoom(roomDefinition) {
-        if (!roomDefinition.tilesets || roomDefinition.tilesets.length === 0) {
-            console.warn("No tilesets found in room definition");
-            return [];
-        }
-
         // Find the maximum tile ID used in this room to size our array
         const maxTileId = this.getMaxTileId(roomDefinition);
         const allSprites = new Array(maxTileId + 1).fill(null);
@@ -65,24 +60,8 @@ export default class TilesetManager {
         // Look up the image name from our mapping
         const imageName = this.tilesetMapping[tilesetFileName];
 
-        if (!imageName) {
-            console.error(
-                `No image mapping found for tileset: ${tilesetFileName}`
-            );
-            console.log(
-                "Available mappings:",
-                Object.keys(this.tilesetMapping)
-            );
-            return [];
-        }
-
         // Get the image
         const image = images.get(imageName);
-
-        if (!image) {
-            console.error(`Image not loaded: ${imageName}`);
-            return [];
-        }
 
         // Generate sprites from the tileset image
         return Sprite.generateSpritesFromSpriteSheet(

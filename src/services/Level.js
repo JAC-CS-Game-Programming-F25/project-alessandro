@@ -65,27 +65,29 @@ export default class Level {
     render() {
         if (!this.currentRoom || !this.player) return;
 
-        // Render bottom layers
+        // 1. Render floor layers (behind everything)
         this.currentRoom.floorLayer.render();
         this.currentRoom.wallCollisionLayer.render();
         this.currentRoom.objectCollisionLayer.render();
 
-        // Render items
-        this.currentRoom.items.forEach((item) => item.render());
+        // 2. Render interaction prompt
+        this.currentRoom.interactableManager.renderPrompt();
 
-        // Render guards (WITHOUT vision cones)
-        this.currentRoom.guards.forEach((guard) => {
-            const x = Math.floor(guard.canvasPosition.x);
-            const y = Math.floor(
-                guard.canvasPosition.y - guard.dimensions.y / 2
-            );
-            guard.sprites[guard.currentFrame].render(x, y);
-        });
+        // 3. Render guards (sprites only, no vision cones yet)
+        if (this.currentRoom.guards && this.currentRoom.guards.length > 0) {
+            this.currentRoom.guards.forEach((guard) => {
+                const x = Math.floor(guard.canvasPosition.x);
+                const y = Math.floor(
+                    guard.canvasPosition.y - guard.dimensions.y / 2
+                );
+                guard.sprites[guard.currentFrame].render(x, y);
+            });
+        }
 
-        // Render player
+        // 4. Render player
         this.player.render();
 
-        // Render top layers
+        // 5. Render layers that should appear OVER the player
         if (this.currentRoom.walkUnderLayer) {
             this.currentRoom.walkUnderLayer.render();
         }
@@ -94,11 +96,13 @@ export default class Level {
             this.currentRoom.topmostLayer.render();
         }
 
-        // Render vision cones LAST (above everything)
-        this.currentRoom.guards.forEach((guard) => {
-            if (guard.visionCone) {
-                guard.visionCone.render();
-            }
-        });
+        // 6. Render vision cones LAST (above absolutely everything)
+        if (this.currentRoom.guards && this.currentRoom.guards.length > 0) {
+            this.currentRoom.guards.forEach((guard) => {
+                if (guard.visionCone) {
+                    guard.visionCone.render();
+                }
+            });
+        }
     }
 }

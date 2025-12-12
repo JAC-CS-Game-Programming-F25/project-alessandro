@@ -1,6 +1,5 @@
 import Animation from "../../../lib/Animation.js";
 import State from "../../../lib/State.js";
-import Player from "../../entities/Player.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import { input } from "../../globals.js";
@@ -8,12 +7,7 @@ import Input from "../../../lib/Input.js";
 
 export default class PlayerIdlingState extends State {
     static IDLE_ANIMATION_TIME = 0.2;
-    /**
-     * In this state, the player is stationary unless
-     * a directional key or the spacebar is pressed.
-     *
-     * @param {Player} player
-     */
+
     constructor(player) {
         super();
 
@@ -44,6 +38,17 @@ export default class PlayerIdlingState extends State {
     }
 
     update() {
+        // Check for interaction
+        if (input.isKeyPressed(Input.KEYS.E)) {
+            this.handleInteraction();
+        }
+
+        // Check for movement
+        if (input.isKeyHeld(Input.KEYS.SHIFT)) {
+            this.player.changeState(PlayerStateName.Crouching);
+            return;
+        }
+
         if (input.isKeyHeld(Input.KEYS.S)) {
             this.player.direction = Direction.Down;
             this.player.changeState(PlayerStateName.Walking);
@@ -56,6 +61,24 @@ export default class PlayerIdlingState extends State {
         } else if (input.isKeyHeld(Input.KEYS.A)) {
             this.player.direction = Direction.Left;
             this.player.changeState(PlayerStateName.Walking);
+        }
+    }
+
+    /**
+     * Handle E key interaction with items
+     */
+    handleInteraction() {
+        const room = this.player.level.currentRoom;
+
+        if (room.interactableManager.canInteract()) {
+            const itemData = room.interactableManager.collect();
+
+            if (itemData) {
+                this.player.level.moneyCollected += itemData.value;
+                console.log(
+                    `Stole ${itemData.type} worth $${itemData.value}! Total: $${this.player.level.moneyCollected}`
+                );
+            }
         }
     }
 }

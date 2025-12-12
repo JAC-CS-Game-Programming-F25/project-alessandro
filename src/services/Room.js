@@ -1,9 +1,7 @@
 import Layer from "./Layer.js";
-import Tile from "./Tile.js";
-import Item from "../objects/Item.js";
-import ItemType from "../enums/ItemType.js";
 import TilesetManager from "./TilesetManager.js";
 import GuardFactory from "./GuardFactory.js";
+import InteractableManager from "./InteractableManager.js";
 
 export default class Room {
     /**
@@ -57,17 +55,12 @@ export default class Room {
             [this.wallCollisionLayer, this.objectCollisionLayer]
         );
 
-        this.items = this.parseItemsFromObjectGroup(itemsLayer, sprites);
+        this.itemsObjectLayer = itemsLayer;
+        this.interactableManager = new InteractableManager(this);
 
-        // Create guards using factory - we'll pass level reference later
         const guardFactory = new GuardFactory();
-        this.guards = guardFactory.createGuardsFromObjectGroup(
-            guardsLayer,
-            null
-        );
-
-        console.log("Room: Guards created:", this.guards);
-        console.log("Room: Number of guards:", this.guards.length);
+        this.guards =
+            guardFactory.createGuardsFromObjectGroup(guardsLayer, null) || [];
 
         this.entryPoints = [];
         this.exitPoints = [];
@@ -86,7 +79,10 @@ export default class Room {
 
                 // Check if ANY collision layer has a tile at this position
                 for (const layer of collisionLayers) {
-                    if (layer.getTile(x, y) !== null) {
+                    const tile = layer.getTile(x, y);
+
+                    // Check if tile exists AND has a non-zero ID
+                    if (tile !== null && tile.id !== 0) {
                         hasTile = true;
                         break;
                     }
@@ -102,76 +98,17 @@ export default class Room {
             width: width,
             height: height,
             getTile(x, y) {
+                if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
+                    return null;
+                }
                 return this.tiles[x + y * this.width];
             },
         };
     }
 
-    /**
-     * Parse items from Tiled object group layer
-     * @param {object} objectGroupLayer - The Items layer from Tiled
-     * @param {array} sprites
-     * @returns {array} Array of Item objects
-     */
-    parseItemsFromObjectGroup(objectGroupLayer, sprites) {
-        if (!objectGroupLayer || objectGroupLayer.type !== "objectgroup") {
-            return [];
-        }
-
-        const items = [];
-
-        objectGroupLayer.objects.forEach((obj) => {
-            const gridX = Math.floor(obj.x / Tile.SIZE);
-            const gridY = Math.floor(obj.y / Tile.SIZE);
-
-            const itemData = this.getItemDataFromProperties(obj.properties);
-
-            if (itemData) {
-                const item = new Item(
-                    gridX,
-                    gridY,
-                    itemData.type,
-                    itemData.value,
-                    null // Placeholder for now
-                );
-                items.push(item);
-            }
-        });
-
-        return items;
-    }
-
-    /**
-     * Extract item data from Tiled object properties
-     * @param {array} properties - Array of property objects from Tiled
-     */
-    getItemDataFromProperties(properties) {
-        if (!properties) return null;
-
-        const typeProp = properties.find((p) => p.name === "type");
-        if (!typeProp) return null;
-
-        const typeValue = typeProp.value.toLowerCase();
-
-        const itemDataMap = {
-            painting: { type: ItemType.Painting, value: 100 },
-            sculpture: { type: ItemType.Sculpture, value: 500 },
-            artifact: { type: ItemType.Artifact, value: 1000 },
-            jewel: { type: ItemType.Jewel, value: 2000 },
-        };
-
-        return itemDataMap[typeValue] || null;
-    }
-
     update(dt, player, level) {
-        this.items.forEach((item) => {
-            if (item.checkPlayerCollision(player)) {
-                item.collect();
-                this.onItemCollected(item);
-            }
-        });
+        this.interactableManager.update(player.position);
 
-        // Update guards with level reference
         this.guards.forEach((guard) => {
             guard.level = level;
             guard.update(dt);
@@ -182,6 +119,8 @@ export default class Room {
         this.floorLayer.render();
         this.wallCollisionLayer.render();
         this.objectCollisionLayer.render();
+
+        this.interactableManager.renderPrompt();
 
         if (this.walkUnderLayer) {
             this.walkUnderLayer.render();
