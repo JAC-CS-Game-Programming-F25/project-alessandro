@@ -18,33 +18,15 @@ export default class GuardFactory {
      * @returns {array} Array of Guard objects
      */
     createGuardsFromObjectGroup(objectGroupLayer, level) {
-        console.log(
-            "GuardFactory: Creating guards from layer:",
-            objectGroupLayer
-        );
-
-        if (!objectGroupLayer || objectGroupLayer.type !== "objectgroup") {
-            console.warn("GuardFactory: Invalid object group layer");
-            return [];
-        }
-
         const guards = [];
 
         objectGroupLayer.objects.forEach((obj) => {
-            console.log("GuardFactory: Processing object:", obj);
             const guard = this.createGuardFromObject(obj, level);
             if (guard) {
-                console.log("GuardFactory: Created guard:", guard);
                 guards.push(guard);
-            } else {
-                console.warn(
-                    "GuardFactory: Failed to create guard from object:",
-                    obj
-                );
             }
         });
 
-        console.log("GuardFactory: Total guards created:", guards.length);
         return guards;
     }
 
@@ -71,18 +53,6 @@ export default class GuardFactory {
             this.getPropertyValue(tiledObject.properties, "direction") ||
             "down";
 
-        console.log(
-            `GuardFactory: Object at (${gridX}, ${gridY}), type: ${guardType}, direction: ${direction}`
-        );
-
-        if (!guardType) {
-            console.warn(
-                "Guard object missing guardType property:",
-                tiledObject
-            );
-            return null;
-        }
-
         const guardDefinition = {
             position: new Vector(gridX, gridY),
             direction: this.stringToDirection(direction),
@@ -90,7 +60,6 @@ export default class GuardFactory {
 
         switch (guardType.toLowerCase()) {
             case GuardType.Patrol:
-                console.log("Creating patrol guard...");
                 return this.createPatrolGuard(
                     tiledObject,
                     guardDefinition,
@@ -98,7 +67,6 @@ export default class GuardFactory {
                 );
 
             case GuardType.Stationary:
-                console.log("Creating stationary guard...");
                 return this.createStationaryGuard(
                     tiledObject,
                     guardDefinition,
@@ -106,7 +74,6 @@ export default class GuardFactory {
                 );
 
             default:
-                console.warn("Unknown guard type:", guardType);
                 return null;
         }
     }
@@ -121,11 +88,6 @@ export default class GuardFactory {
             "waypoints"
         );
 
-        if (!waypointsStr) {
-            console.warn("Patrol guard missing waypoints:", tiledObject);
-            return null;
-        }
-
         const waypoints = this.parseWaypoints(waypointsStr);
 
         return new PatrolGuard(guardDefinition, level, waypoints);
@@ -138,11 +100,21 @@ export default class GuardFactory {
         const rotationSpeed =
             this.getPropertyValue(tiledObject.properties, "rotationSpeed") ||
             45;
+        const primaryDirection = this.getPropertyValue(
+            tiledObject.properties,
+            "primaryDirection"
+        );
+
+        // If primaryDirection is specified, use it; otherwise use guard's starting direction
+        const primaryDir = primaryDirection
+            ? this.stringToDirection(primaryDirection)
+            : guardDefinition.direction;
 
         return new StationaryGuard(
             guardDefinition,
             level,
-            parseFloat(rotationSpeed)
+            Number.parseFloat(rotationSpeed),
+            primaryDir
         );
     }
 
@@ -152,7 +124,7 @@ export default class GuardFactory {
      */
     parseWaypoints(waypointsStr) {
         return waypointsStr.split(";").map((point) => {
-            const [x, y] = point.split(",").map((n) => parseFloat(n.trim()));
+            const [x, y] = point.split(",").map((n) => Number.parseFloat(n.trim()));
             return new Vector(x, y);
         });
     }

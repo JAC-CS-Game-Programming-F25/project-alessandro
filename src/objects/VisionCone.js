@@ -105,7 +105,7 @@ export default class VisionCone {
 
         const dx = x - centerX;
         const dy = y - centerY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distance = Math.hypot(dx, dy);
 
         if (distance > effectiveRange) {
             return false;

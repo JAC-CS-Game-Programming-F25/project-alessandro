@@ -9,12 +9,20 @@ import Animation from "../../lib/Animation.js";
 import Direction from "../enums/Direction.js";
 
 export default class StationaryGuard extends Guard {
-    constructor(guardDefinition, level, rotationSpeed = 45) {
+    constructor(
+        guardDefinition,
+        level,
+        rotationSpeed = 45,
+        primaryDirection = null
+    ) {
         super(guardDefinition, level);
 
         this.rotationSpeed = rotationSpeed;
         this.rotationAngle = 0;
+        this.primaryDirection = primaryDirection ?? guardDefinition.direction; // Direction guard favors
+        this.primaryDirectionChance = 0.7;
 
+        // Smooth rotation for stationary guards
         this.visionCone = new VisionCone(
             this.position,
             this.direction,
@@ -23,7 +31,6 @@ export default class StationaryGuard extends Guard {
             true
         );
 
-        // Setup idle animations
         this.idleAnimation = {
             [Direction.Up]: new Animation([6, 7, 8, 9, 10, 11], 0.2),
             [Direction.Down]: new Animation([18, 19, 20, 21, 22, 23], 0.2),
@@ -54,5 +61,58 @@ export default class StationaryGuard extends Guard {
                 this.stateMachine.change(GuardStateName.Alert);
             }
         }
+    }
+
+    /**
+     * Determine next rotation direction with weighted randomness
+     * Favors returning to primary direction
+     */
+    getNextDirection() {
+        const random = Math.random();
+
+        // 70% chance to rotate toward primary direction
+        if (random < this.primaryDirectionChance) {
+            return this.getDirectionTowardPrimary();
+        } else {
+            // 30% chance to rotate in a random direction
+            return this.getRandomDirection();
+        }
+    }
+
+    /**
+     * Calculate which direction to rotate to get closer to primary direction
+     */
+    getDirectionTowardPrimary() {
+        // If already at primary direction, rotate to a random direction
+        if (this.direction === this.primaryDirection) {
+            return this.getRandomDirection();
+        }
+
+        // Calculate shortest rotation to primary direction
+        const diff = (this.primaryDirection - this.direction + 4) % 4;
+
+        // Rotate clockwise (1 step)
+        if (diff === 1 || diff === 2) {
+            return (this.direction + 1) % 4;
+        } else {
+            // Rotate counter-clockwise (which is 3 steps clockwise in our 4-direction system)
+            return (this.direction + 3) % 4;
+        }
+    }
+
+    /**
+     * Get a random direction (excluding current)
+     */
+    getRandomDirection() {
+        const directions = [
+            Direction.Up,
+            Direction.Down,
+            Direction.Left,
+            Direction.Right,
+        ];
+        const otherDirections = directions.filter((d) => d !== this.direction);
+        return otherDirections[
+            Math.floor(Math.random() * otherDirections.length)
+        ];
     }
 }
