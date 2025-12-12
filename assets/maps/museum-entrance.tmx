@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="16" height="22" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="16">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="16" height="22" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="18">
  <tileset firstgid="1" source="tilesets/museum-entrance-layer-1.tsj"/>
  <tileset firstgid="353" source="tilesets/room-builder.tsj"/>
  <tileset firstgid="8941" source="tilesets/museum-entrance-layer-2.tsj"/>
@@ -81,6 +81,21 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="9" name="Guards">
+  <object id="16" x="159.5" y="128" width="32" height="31.5">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="guardType" value="patrol"/>
+    <property name="waypoints" value="5,4;12,4;12,8;5,8"/>
+   </properties>
+  </object>
+  <object id="17" x="31.5" y="479.5" width="32" height="31.5">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="guardType" value="stationary"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="4" name="Collectible-Items">
   <object id="10" x="257.818" y="35.6364" width="60.1818" height="44.3636">
    <properties>

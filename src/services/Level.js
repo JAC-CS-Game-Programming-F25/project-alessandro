@@ -52,7 +52,7 @@ export default class Level {
         if (!this.currentRoom || !this.player) return;
 
         this.player.update(dt);
-        this.currentRoom.update(dt, this.player);
+        this.currentRoom.update(dt, this.player, this); // Pass 'this' as level reference
 
         this.currentRoom.onItemCollected = (item) => {
             this.moneyCollected += item.value;
@@ -65,16 +65,27 @@ export default class Level {
     render() {
         if (!this.currentRoom || !this.player) return;
 
-        // Render bottom layers and items
+        // Render bottom layers
         this.currentRoom.floorLayer.render();
         this.currentRoom.wallCollisionLayer.render();
         this.currentRoom.objectCollisionLayer.render();
+
+        // Render items
         this.currentRoom.items.forEach((item) => item.render());
+
+        // Render guards (WITHOUT vision cones)
+        this.currentRoom.guards.forEach((guard) => {
+            const x = Math.floor(guard.canvasPosition.x);
+            const y = Math.floor(
+                guard.canvasPosition.y - guard.dimensions.y / 2
+            );
+            guard.sprites[guard.currentFrame].render(x, y);
+        });
 
         // Render player
         this.player.render();
 
-        // Render top layers (over player)
+        // Render top layers
         if (this.currentRoom.walkUnderLayer) {
             this.currentRoom.walkUnderLayer.render();
         }
@@ -82,5 +93,12 @@ export default class Level {
         if (this.currentRoom.topmostLayer) {
             this.currentRoom.topmostLayer.render();
         }
+
+        // Render vision cones LAST (above everything)
+        this.currentRoom.guards.forEach((guard) => {
+            if (guard.visionCone) {
+                guard.visionCone.render();
+            }
+        });
     }
 }

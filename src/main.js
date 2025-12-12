@@ -30,9 +30,6 @@ const {
     sounds: soundDefinitions,
 } = await fetch("./config/assets.json").then((response) => response.json());
 
-// Remove this line - we don't need it anymore
-// const mapDefinition = await fetch("./config/map.json").then((response) => response.json());
-
 // Load all the assets from their definitions.
 images.load(imageDefinitions);
 fonts.load(fontDefinitions);

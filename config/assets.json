@@ -29,6 +29,18 @@
             "path": "./assets/images/thief-walk.png",
             "width": 768,
             "height": 64
+        },
+        {
+            "name": "guard-idle",
+            "path": "./assets/images/guard-idle.png",
+            "width": 768,
+            "height": 64
+        },
+        {
+            "name": "guard-walk",
+            "path": "./assets/images/guard-walk.png",
+            "width": 768,
+            "height": 64
         }
     ],
     "fonts": [],

@@ -3,6 +3,7 @@ import Tile from "./Tile.js";
 import Item from "../objects/Item.js";
 import ItemType from "../enums/ItemType.js";
 import TilesetManager from "./TilesetManager.js";
+import GuardFactory from "./GuardFactory.js";
 
 export default class Room {
     /**
@@ -16,10 +17,8 @@ export default class Room {
         this.width = roomDefinition.width;
         this.height = roomDefinition.height;
 
-        // Load sprites dynamically from all tilesets
         const sprites = tilesetManager.loadSpritesForRoom(roomDefinition);
 
-        // Find layers by name
         const floorLayer = roomDefinition.layers.find(
             (l) => l.name === "Floor"
         );
@@ -38,6 +37,9 @@ export default class Room {
         const itemsLayer = roomDefinition.layers.find(
             (l) => l.name === "Collectible-Items"
         );
+        const guardsLayer = roomDefinition.layers.find(
+            (l) => l.name === "Guards"
+        );
 
         this.floorLayer = new Layer(floorLayer, sprites);
         this.wallCollisionLayer = new Layer(wallCollisionLayer, sprites);
@@ -49,7 +51,6 @@ export default class Room {
             ? new Layer(topmostLayer, sprites)
             : null;
 
-        // Combine collision layers for player collision detection
         this.collisionLayer = this.createCombinedCollisionLayer(
             roomDefinition.width,
             roomDefinition.height,
@@ -57,6 +58,16 @@ export default class Room {
         );
 
         this.items = this.parseItemsFromObjectGroup(itemsLayer, sprites);
+
+        // Create guards using factory - we'll pass level reference later
+        const guardFactory = new GuardFactory();
+        this.guards = guardFactory.createGuardsFromObjectGroup(
+            guardsLayer,
+            null
+        );
+
+        console.log("Room: Guards created:", this.guards);
+        console.log("Room: Number of guards:", this.guards.length);
 
         this.entryPoints = [];
         this.exitPoints = [];
@@ -152,28 +163,26 @@ export default class Room {
         return itemDataMap[typeValue] || null;
     }
 
-    update(dt, player) {
-        // Check for item collection
+    update(dt, player, level) {
         this.items.forEach((item) => {
             if (item.checkPlayerCollision(player)) {
                 item.collect();
                 this.onItemCollected(item);
             }
         });
+
+        // Update guards with level reference
+        this.guards.forEach((guard) => {
+            guard.level = level;
+            guard.update(dt);
+        });
     }
 
     render() {
-        // Render bottom layers
         this.floorLayer.render();
         this.wallCollisionLayer.render();
         this.objectCollisionLayer.render();
 
-        // Items render here (before player)
-        this.items.forEach((item) => item.render());
-
-        // Player renders in Level.js between this and topmost layers
-
-        // Render layers that should appear over the player
         if (this.walkUnderLayer) {
             this.walkUnderLayer.render();
         }

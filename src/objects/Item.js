@@ -1,15 +1,18 @@
+import GameObject from "./GameObject.js";
 import Vector from "../../lib/Vector.js";
 import Tile from "../services/Tile.js";
 import { context } from "../globals.js";
 import ItemType from "../enums/ItemType.js";
 
-export default class Item {
+export default class Item extends GameObject {
     constructor(x, y, type, value, sprite = null) {
-        this.position = new Vector(x, y);
-        this.canvasPosition = new Vector(x * Tile.SIZE, y * Tile.SIZE);
+        super({
+            position: new Vector(x, y),
+            sprite: sprite,
+        });
+
         this.type = type;
         this.value = value;
-        this.sprite = sprite;
         this.isCollected = false;
 
         this.hitbox = {
@@ -24,10 +27,8 @@ export default class Item {
         if (this.isCollected) return;
 
         if (this.sprite) {
-            // Render actual sprite when available
-            this.sprite.render(this.canvasPosition.x, this.canvasPosition.y);
+            super.render();
         } else {
-            // Render placeholder
             this.renderPlaceholder();
         }
     }
@@ -35,12 +36,11 @@ export default class Item {
     renderPlaceholder() {
         context.save();
 
-        // Different colors for different item types
         const colorMap = {
-            [ItemType.Painting]: "#FF6B6B", // Red
-            [ItemType.Sculpture]: "#4ECDC4", // Teal
-            [ItemType.Artifact]: "#FFE66D", // Yellow
-            [ItemType.Jewel]: "#A8E6CF", // Green
+            [ItemType.Painting]: "#FF6B6B",
+            [ItemType.Sculpture]: "#4ECDC4",
+            [ItemType.Artifact]: "#FFE66D",
+            [ItemType.Jewel]: "#A8E6CF",
         };
 
         context.fillStyle = colorMap[this.type] || "#FFFFFF";
@@ -51,7 +51,6 @@ export default class Item {
             Tile.SIZE - 8
         );
 
-        // Draw value text
         context.fillStyle = "#000000";
         context.font = "10px Arial";
         context.textAlign = "center";

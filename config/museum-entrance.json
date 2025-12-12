@@ -103,11 +103,71 @@
         }, 
         {
          "draworder":"topdown",
+         "id":9,
+         "name":"Guards",
+         "objects":[
+                {
+                 "height":31.5,
+                 "id":16,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"direction",
+                         "type":"string",
+                         "value":"down"
+                        }, 
+                        {
+                         "name":"guardType",
+                         "type":"string",
+                         "value":"patrol"
+                        }, 
+                        {
+                         "name":"waypoints",
+                         "type":"string",
+                         "value":"5,4;12,4;12,8;5,8"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":159.5,
+                 "y":128
+                }, 
+                {
+                 "height":31.5,
+                 "id":17,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"direction",
+                         "type":"string",
+                         "value":"right"
+                        }, 
+                        {
+                         "name":"guardType",
+                         "type":"string",
+                         "value":"stationary"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":31.5,
+                 "y":479.5
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":4,
          "name":"Collectible-Items",
          "objects":[
                 {
-                 "height":44.3636363636364,
+                 "height":44.3636,
                  "id":10,
                  "name":"",
                  "properties":[
@@ -119,9 +179,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":60.1818181818182,
-                 "x":257.818181818182,
-                 "y":35.6363636363636
+                 "width":60.1818,
+                 "x":257.818,
+                 "y":35.6364
                 }, 
                 {
                  "height":35.5,
@@ -158,7 +218,7 @@
                  "y":56.5
                 }, 
                 {
-                 "height":33.3333333333333,
+                 "height":33.3333,
                  "id":13,
                  "name":"",
                  "properties":[
@@ -246,8 +306,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":9,
- "nextobjectid":16,
+ "nextlayerid":10,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
