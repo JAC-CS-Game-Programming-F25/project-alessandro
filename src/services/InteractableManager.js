@@ -100,7 +100,7 @@ export default class InteractableManager {
         return itemDataMap[typeValue] || null;
     }
 
-    update(playerPosition) {
+    update(playerPosition, level = null) {
         this.currentInteractable = null;
         let closestDistance = this.interactionRange;
 
@@ -123,6 +123,24 @@ export default class InteractableManager {
                 this.currentInteractable = interactable;
             }
         }
+
+        // Add sparkles to nearby items (if level is provided)
+        if (level?.particleSystem) {
+            for (const interactable of this.interactables) {
+                if (interactable.isCollected) continue;
+
+                // Sparkle occasionally
+                if (Math.random() < 0.05) {
+                    // 5% chance per frame
+                    level.particleSystem.sparkle(
+                        interactable.pixelX,
+                        interactable.pixelY,
+                        interactable.pixelWidth,
+                        interactable.pixelHeight
+                    );
+                }
+            }
+        }
     }
 
     /**
@@ -130,16 +148,6 @@ export default class InteractableManager {
      * Returns the item data with its index
      */
     collect() {
-        if (!this.currentInteractable) {
-            console.warn("No current interactable to collect");
-            return null;
-        }
-
-        if (this.currentInteractable.isCollected) {
-            console.warn("Item already collected!");
-            return null;
-        }
-
         const interactable = this.currentInteractable;
 
         // Get the index BEFORE marking as collected

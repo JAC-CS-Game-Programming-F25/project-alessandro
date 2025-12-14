@@ -33,12 +33,12 @@ export default class HUD {
         context.strokeRect(panelX, panelY, panelWidth, panelHeight);
         context.shadowBlur = 0;
 
-        // Money amount - single line with dollar sign
+        // Money amount
         context.fillStyle = "#4CAF50";
         context.font = "bold 18px Arial";
         context.textAlign = "center";
         context.fillText(
-            `$${this.level.moneyCollected} / $${this.level.quota}`,
+            `$${Math.floor(this.level.displayedMoney)} / $${this.level.quota}`,
             panelX + panelWidth / 2,
             panelY + 25
         );
@@ -55,9 +55,10 @@ export default class HUD {
 
         // Fill
         const progress = Math.min(
-            this.level.moneyCollected / this.level.quota,
+            this.level.displayedMoney / this.level.quota,
             1
         );
+
         const fillGrad = context.createLinearGradient(
             barX,
             barY,

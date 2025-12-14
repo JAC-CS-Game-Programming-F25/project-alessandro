@@ -2,12 +2,15 @@ import Player from "../entities/Player.js";
 import Vector from "../../lib/Vector.js";
 import Room from "./Room.js";
 import TilesetManager from "./TilesetManager.js";
-import { setCanvasSize } from "../globals.js";
+import { timer, setCanvasSize } from "../globals.js";
 import Tile from "./Tile.js";
 import MessageDisplay from "../objects/MessageDisplay.js";
+import ParticleSystem from "./ParticleSystem.js";
+import ExitPortal from "../objects/ExitPortal.js";
+import Easing from "../../lib/Easing.js";
 
 export default class Level {
-    static QUOTA = 10000;
+    static QUOTA = 500;
 
     constructor() {
         this.rooms = new Map();
@@ -15,6 +18,7 @@ export default class Level {
         this.currentRoomName = null;
         this.player = null;
         this.moneyCollected = 0;
+        this.displayedMoney = 0;
         this.quota = Level.QUOTA;
         this.tilesetManager = new TilesetManager();
 
@@ -24,10 +28,18 @@ export default class Level {
         this.playerReachedExit = false;
         this.onPlayerCaught = null;
 
+        this.messageDisplay = new MessageDisplay();
+
+        this.particleSystem = new ParticleSystem();
+        this.exitPortal = null;
+
+        this.transitionCooldown = 0;
+        this.transitionCooldownTime = 0.5;
+        this.playerReachedExit = false;
+        this.onPlayerCaught = null;
+
         // Track collected items by unique ID (room_name:item_index)
         this.collectedItems = new Set();
-
-        this.messageDisplay = new MessageDisplay();
     }
 
     async loadRoom(roomName, jsonPath) {
@@ -63,10 +75,22 @@ export default class Level {
             this.player.canvasPosition.y = playerSpawnPosition.y * Tile.SIZE;
         }
 
-        // Apply collected items state to the new room
-        this.applyCollectedItemsToRoom();
+        // Find the exit transition and create portal
+        this.exitPortal = null;
+        const exitTransition = this.currentRoom.roomTransition.transitions.find(
+            (t) => t.targetRoom === "exit"
+        );
 
-        // Set up the item collection callback for this room
+        if (exitTransition) {
+            this.exitPortal = new ExitPortal(
+                exitTransition.x,
+                exitTransition.y,
+                exitTransition.width,
+                exitTransition.height
+            );
+        }
+
+        this.applyCollectedItemsToRoom();
         this.setupItemCollectionCallback();
     }
 
@@ -84,7 +108,6 @@ export default class Level {
         interactables.forEach((item, index) => {
             const itemId = `${this.currentRoomName}:${index}`;
             if (this.collectedItems.has(itemId)) {
-                // IMPORTANT: Mark item as collected FIRST
                 item.isCollected = true;
 
                 // Then clear the tiles visually
@@ -96,10 +119,6 @@ export default class Level {
                 );
             }
         });
-
-        console.log(
-            `Applied ${this.collectedItems.size} collected items to room ${this.currentRoomName}`
-        );
     }
 
     /**
@@ -107,32 +126,33 @@ export default class Level {
      * Called once when entering a room
      */
     setupItemCollectionCallback() {
+        // Store a reference to level for use in the continuous update
+        if (!this.moneyTweenObject) {
+            this.moneyTweenObject = { value: 0 };
+        }
+
         this.currentRoom.onItemCollected = (item) => {
-            console.log("onItemCollected triggered:", item);
+            const interactables =
+                this.currentRoom.interactableManager.interactables;
+            const itemData = interactables[item.index];
 
-            // Get the index directly from the item (passed by InteractableManager)
-            const itemIndex = item.index;
-            const itemId = `${this.currentRoomName}:${itemIndex}`;
-
-            console.log(
-                `Attempting to collect item at index ${itemIndex} (${itemId})`
-            );
-
-            if (this.collectedItems.has(itemId)) {
-                console.warn(`Item ${itemId} was already collected! Skipping.`);
-                return;
-            }
+            const itemX = itemData.pixelX + itemData.pixelWidth / 2;
+            const itemY = itemData.pixelY + itemData.pixelHeight / 2;
+            this.particleSystem.burst(itemX, itemY, "#FFD700", 20);
 
             this.moneyCollected += item.value;
 
-            // Mark item as collected in our persistent state
+            // Tween the moneyTweenObject
+            timer.tween(
+                this.moneyTweenObject,
+                { value: this.moneyCollected },
+                0.5,
+                Easing.linear
+            );
+
+            const itemIndex = item.index;
             if (itemIndex !== -1 && itemIndex !== undefined) {
                 this.markItemCollected(itemIndex);
-                console.log(
-                    `Successfully collected item ${itemId} for $${item.value}`
-                );
-            } else {
-                console.error("Invalid item index!", itemIndex);
             }
         };
     }
@@ -144,9 +164,6 @@ export default class Level {
     markItemCollected(itemIndex) {
         const itemId = `${this.currentRoomName}:${itemIndex}`;
         this.collectedItems.add(itemId);
-        console.log(
-            `Marked item as collected: ${itemId}. Total collected: ${this.collectedItems.size}`
-        );
     }
 
     get collisionLayer() {
@@ -156,7 +173,17 @@ export default class Level {
     update(dt) {
         this.player.update(dt);
         this.currentRoom.update(dt, this.player, this);
-        this.messageDisplay.update(dt); // ADD THIS
+        this.particleSystem.update(dt);
+
+        if (this.moneyTweenObject) {
+            this.displayedMoney = this.moneyTweenObject.value;
+        }
+
+        this.messageDisplay.update(dt);
+
+        if (this.exitPortal) {
+            this.exitPortal.update(dt, this.moneyCollected >= this.quota);
+        }
 
         // Update transition cooldown
         if (this.transitionCooldown > 0) {
@@ -181,14 +208,12 @@ export default class Level {
     }
 
     render() {
-        if (!this.currentRoom || !this.player) return;
-
         // 1. Render floor layers
         this.currentRoom.floorLayer.render();
         this.currentRoom.wallCollisionLayer.render();
         this.currentRoom.objectCollisionLayer.render();
 
-        // 2. Render vision cones (BEFORE walk-under layer)
+        // 2. Render vision cones
         if (this.currentRoom.guards && this.currentRoom.guards.length > 0) {
             this.currentRoom.guards.forEach((guard) => {
                 if (guard.visionCone) {
@@ -211,7 +236,7 @@ export default class Level {
         // 4. Render player
         this.player.render();
 
-        // 5. Render layers that appear OVER vision cones, guards, and player
+        // 5. Render walk-under and topmost layers
         if (this.currentRoom.walkUnderLayer) {
             this.currentRoom.walkUnderLayer.render();
         }
@@ -220,10 +245,17 @@ export default class Level {
             this.currentRoom.topmostLayer.render();
         }
 
-        // 6. Render interaction prompt LAST (so it's always on top)
+        // 6. Render exit portal
+        if (this.exitPortal) {
+            this.exitPortal.render();
+        }
+
+        // 7. Render particles on top
+        this.particleSystem.render();
+
+        // 8. Render interaction prompt last
         this.currentRoom.interactableManager.renderPrompt();
 
-        // Render messages on top of everything
         this.messageDisplay.render();
     }
 
@@ -294,6 +326,7 @@ export default class Level {
     restoreSaveState(saveData) {
         // Restore money
         this.moneyCollected = saveData.moneyCollected || 0;
+        this.displayedMoney = saveData.moneyCollected || 0;
 
         // Restore collected items
         this.collectedItems = new Set(saveData.collectedItems || []);

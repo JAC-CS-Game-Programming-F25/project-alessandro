@@ -117,7 +117,7 @@ export default class Room {
     }
 
     update(dt, player, level) {
-        this.interactableManager.update(player.position);
+        this.interactableManager.update(player.position, level);
 
         if (this.guards && this.guards.length > 0) {
             this.guards.forEach((guard) => {
@@ -141,9 +141,5 @@ export default class Room {
         if (this.topmostLayer) {
             this.topmostLayer.render();
         }
-    }
-
-    onItemCollected(item) {
-        console.log(`Collected ${item.type} worth $${item.value}`);
     }
 }
