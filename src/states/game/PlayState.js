@@ -155,6 +155,14 @@ export default class PlayState extends State {
         this.level.render();
         this.hud.render();
 
+        // DEBUG: Show interaction ranges (set to true to enable)
+        const DEBUG_INTERACTIONS = true; // <-- Set this to true
+        if (DEBUG_INTERACTIONS && this.level.currentRoom && this.level.player) {
+            this.level.currentRoom.interactableManager.renderDebug(
+                this.level.player.position
+            );
+        }
+
         if (this.isPaused) {
             this.renderPauseOverlay();
         }

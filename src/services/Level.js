@@ -71,7 +71,7 @@ export default class Level {
      * Mark items as collected in the current room based on saved state
      */
     applyCollectedItemsToRoom() {
-        if (!this.currentRoom || !this.currentRoom.interactableManager) {
+        if (!this.currentRoom?.interactableManager) {
             return;
         }
 
@@ -193,10 +193,7 @@ export default class Level {
             });
         }
 
-        // 3. Render interaction prompt
-        this.currentRoom.interactableManager.renderPrompt();
-
-        // 4. Render guards (sprites only)
+        // 3. Render guards (sprites only)
         if (this.currentRoom.guards && this.currentRoom.guards.length > 0) {
             this.currentRoom.guards.forEach((guard) => {
                 const x = Math.floor(guard.canvasPosition.x);
@@ -207,10 +204,10 @@ export default class Level {
             });
         }
 
-        // 5. Render player
+        // 4. Render player
         this.player.render();
 
-        // 6. Render layers that appear OVER vision cones, guards, and player
+        // 5. Render layers that appear OVER vision cones, guards, and player
         if (this.currentRoom.walkUnderLayer) {
             this.currentRoom.walkUnderLayer.render();
         }
@@ -218,6 +215,9 @@ export default class Level {
         if (this.currentRoom.topmostLayer) {
             this.currentRoom.topmostLayer.render();
         }
+
+        // 6. Render interaction prompt LAST (so it's always on top)
+        this.currentRoom.interactableManager.renderPrompt();
     }
 
     /**
