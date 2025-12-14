@@ -47,7 +47,7 @@ export default class Guard extends GameEntity {
 
         if (this.visionCone) {
             // Update vision cone range based on whether player is crouching
-            if (this.level && this.level.player) {
+            if (this.level?.player) {
                 const detectionMultiplier = this.level.player.isCrouching
                     ? 0.6
                     : 1.0;
@@ -66,17 +66,15 @@ export default class Guard extends GameEntity {
     }
 
     checkPlayerDetection(player) {
-        if (!this.visionCone) return false;
-
-        const detectionMultiplier = player.isCrouching ? 0.6 : 1.0;
-
         // Pass the collision layer for line-of-sight checking
         const collisionLayer = this.level?.collisionLayer;
 
+        // Simply check if player is in the vision cone
+        // The cone's range is already adjusted based on crouch state
         return this.visionCone.containsPoint(
             player.canvasPosition.x + 16,
             player.canvasPosition.y + 32,
-            detectionMultiplier,
+            1.0,
             collisionLayer
         );
     }

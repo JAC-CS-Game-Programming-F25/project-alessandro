@@ -11,7 +11,7 @@ export default class VisionCone {
             !Number.isNaN(numericRange) && numericRange > 0 ? numericRange : 5;
 
         this.baseRange = finalRange * Tile.SIZE * 0.95; // Store base range
-        this.range = this.baseRange; // Current range (can be modified by multiplier)
+        this.range = this.baseRange; // Current range (modified by multiplier)
         this.detectionMultiplier = 1.0; // Default multiplier
 
         this.angle = angle;
@@ -106,7 +106,7 @@ export default class VisionCone {
             const segmentAngle =
                 baseAngle - halfAngle + (halfAngle * 2 * i) / arcSegments;
             this.vertices.push({
-                x: centerX + Math.cos(segmentAngle) * this.range, // Uses current range
+                x: centerX + Math.cos(segmentAngle) * this.range,
                 y: centerY + Math.sin(segmentAngle) * this.range,
             });
         }
@@ -114,14 +114,17 @@ export default class VisionCone {
 
     /**
      * Check if a point is inside the vision cone AND has line of sight
+     * NOTE: multiplier parameter is NO LONGER USED - we use this.detectionMultiplier instead
      * @param {number} x - Point X in pixels
      * @param {number} y - Point Y in pixels
-     * @param {number} multiplier - Detection multiplier (0.6 for crouching)
+     * @param {number} multiplier - DEPRECATED - kept for backwards compatibility
      * @param {Layer} collisionLayer - Collision layer to check walls
      * @returns {boolean}
      */
     containsPoint(x, y, multiplier = 1.0, collisionLayer = null) {
-        const effectiveRange = this.range * multiplier;
+        // Use the ALREADY-MODIFIED range (no need to apply multiplier again)
+        const effectiveRange = this.range;
+
         const centerX = this.position.x * Tile.SIZE + Tile.SIZE / 2;
         const centerY = this.position.y * Tile.SIZE + Tile.SIZE / 2;
 
