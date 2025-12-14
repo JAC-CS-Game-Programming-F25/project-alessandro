@@ -74,10 +74,10 @@ export default class PlayerIdlingState extends State {
             const itemData = room.interactableManager.collect();
 
             if (itemData) {
-                this.player.level.moneyCollected += itemData.value;
-                console.log(
-                    `Stole ${itemData.type} worth $${itemData.value}! Total: $${this.player.level.moneyCollected}`
-                );
+                // Call the Level's callback instead of directly modifying money
+                if (room.onItemCollected) {
+                    room.onItemCollected(itemData);
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ import RoomName from "../../enums/RoomName.js";
 import Vector from "../../../lib/Vector.js";
 import HUD from "../../objects/HUD.js";
 import GameStateName from "../../enums/GameStateName.js";
+import SaveManager from "../../services/SaveManager.js";
 import { input, context, canvas, stateMachine } from "../../globals.js";
 import Input from "../../../lib/Input.js";
 
@@ -16,9 +17,16 @@ export default class PlayState extends State {
         this.isPaused = false;
         this.timeRemaining = 600; // 10 minutes in seconds
         this.timePlayed = 0;
+
+        // Auto-save configuration
+        this.autoSaveInterval = 2;
+        this.timeSinceLastSave = 0;
     }
 
-    async enter() {
+    async enter(params = {}) {
+        // Check if we're loading from a save
+        const loadFromSave = params.loadFromSave || false;
+
         // Load all rooms
         await this.level.loadRoom(
             RoomName.MuseumEntrance,
@@ -45,8 +53,21 @@ export default class PlayState extends State {
             "../../config/museum-room-4.json"
         );
 
-        // Start in the entrance
-        this.level.setCurrentRoom(RoomName.MuseumEntrance, new Vector(14, 16));
+        if (loadFromSave) {
+            // Load from save
+            const saveData = SaveManager.load();
+            if (saveData) {
+                this.timeRemaining = saveData.timeRemaining;
+                this.timePlayed = saveData.timePlayed || 0;
+                this.level.restoreSaveState(saveData);
+            } else {
+                // Fallback to new game if save failed
+                this.startNewGame();
+            }
+        } else {
+            // Start fresh game
+            this.startNewGame();
+        }
 
         // Store timer in level for HUD access
         this.level.timeRemaining = this.timeRemaining;
@@ -60,6 +81,19 @@ export default class PlayState extends State {
         this.hud = new HUD(this.level);
 
         this.isLoaded = true;
+        this.timeSinceLastSave = 0;
+    }
+
+    /**
+     * Start a new game from the beginning
+     */
+    startNewGame() {
+        this.timeRemaining = 600;
+        this.timePlayed = 0;
+        this.level.setCurrentRoom(RoomName.MuseumEntrance, new Vector(14, 16));
+
+        // Delete old save when starting new game
+        SaveManager.deleteSave();
     }
 
     update(dt) {
@@ -81,6 +115,13 @@ export default class PlayState extends State {
         this.timePlayed += dt;
         this.level.timeRemaining = this.timeRemaining;
 
+        // Auto-save logic
+        this.timeSinceLastSave += dt;
+        if (this.timeSinceLastSave >= this.autoSaveInterval) {
+            this.autoSave();
+            this.timeSinceLastSave = 0;
+        }
+
         // Check for time out
         if (this.timeRemaining <= 0) {
             this.onGameOver("timeout");
@@ -95,6 +136,17 @@ export default class PlayState extends State {
         }
     }
 
+    /**
+     * Auto-save the game state
+     */
+    autoSave() {
+        const gameState = this.level.getSaveState();
+        gameState.timeRemaining = this.timeRemaining;
+        gameState.timePlayed = this.timePlayed;
+
+        SaveManager.save(gameState);
+    }
+
     render() {
         if (!this.isLoaded) {
             return;
@@ -105,6 +157,13 @@ export default class PlayState extends State {
 
         if (this.isPaused) {
             this.renderPauseOverlay();
+        }
+    }
+
+    exit() {
+        // Save one last time when exiting play state
+        if (this.isLoaded) {
+            this.autoSave();
         }
     }
 
@@ -170,7 +229,6 @@ export default class PlayState extends State {
         context.strokeStyle = "#4CAF50";
         context.lineWidth = 2;
 
-        // Corner brackets
         context.beginPath();
         context.moveTo(margin, topY + bracketSize);
         context.lineTo(margin, topY);
@@ -199,7 +257,7 @@ export default class PlayState extends State {
         context.font = "16px Arial";
         context.textAlign = "center";
         context.fillText(
-            "Game progress is auto-saved",
+            `Game auto-saves every ${this.autoSaveInterval} seconds`,
             width / 2,
             bottomY + 50
         );
@@ -208,7 +266,9 @@ export default class PlayState extends State {
     }
 
     onGameOver(reason) {
-        // Use transition to game over
+        // Delete save on game over
+        SaveManager.deleteSave();
+
         stateMachine.change(GameStateName.Transition, {
             fromState: this,
             toState: stateMachine.states[GameStateName.GameOver],
@@ -222,7 +282,9 @@ export default class PlayState extends State {
     }
 
     onVictory() {
-        // Use transition to victory
+        // Delete save on victory
+        SaveManager.deleteSave();
+
         stateMachine.change(GameStateName.Transition, {
             fromState: this,
             toState: stateMachine.states[GameStateName.Victory],

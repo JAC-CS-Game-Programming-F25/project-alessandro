@@ -1,5 +1,6 @@
 import State from "../../../lib/State.js";
 import GameStateName from "../../enums/GameStateName.js";
+import SaveManager from "../../services/SaveManager.js";
 import {
     context,
     input,
@@ -20,13 +21,15 @@ export default class TitleScreenState extends State {
         ];
         this.menuOptions = [...this.baseMenuOptions];
         this.selectedOption = 0;
+        this.saveInfo = null;
     }
 
     enter() {
         setCanvasSize(MENU_CANVAS_WIDTH, MENU_CANVAS_HEIGHT);
 
         // Check for save data
-        const hasSaveData = this.checkForSaveData();
+        const hasSaveData = SaveManager.hasSaveData();
+        this.saveInfo = hasSaveData ? SaveManager.getSaveInfo() : null;
 
         // Rebuild menu options based on save data
         if (hasSaveData) {
@@ -34,16 +37,11 @@ export default class TitleScreenState extends State {
                 { text: "Continue Game", color: "#4CAF50", enabled: true },
                 ...this.baseMenuOptions,
             ];
-            this.selectedOption = 0;
+            this.selectedOption = 0; // Select "Continue Game"
         } else {
             this.menuOptions = [...this.baseMenuOptions];
-            this.selectedOption = 0;
+            this.selectedOption = 0; // Select "New Game"
         }
-    }
-
-    checkForSaveData() {
-        // TODO: Check localStorage for save data
-        return false;
     }
 
     update(dt) {
@@ -67,6 +65,16 @@ export default class TitleScreenState extends State {
         if (input.isKeyPressed(Input.KEYS.ENTER)) {
             this.selectOption();
         }
+
+        // Press DELETE to delete save when Continue is highlighted
+        if (
+            this.saveInfo &&
+            this.selectedOption === 0 &&
+            input.isKeyPressed(Input.KEYS.DELETE)
+        ) {
+            SaveManager.deleteSave();
+            this.enter(); // Refresh menu
+        }
     }
 
     selectOption() {
@@ -74,11 +82,13 @@ export default class TitleScreenState extends State {
 
         switch (selected) {
             case "Continue Game":
-                // TODO: Load save data
-                this.transitionTo(GameStateName.Play);
+                // Load game from save
+                this.transitionTo(GameStateName.Play, { loadFromSave: true });
                 break;
             case "New Game":
-                this.transitionTo(GameStateName.Play);
+                // Start fresh (delete any existing save)
+                SaveManager.deleteSave();
+                this.transitionTo(GameStateName.Play, { loadFromSave: false });
                 break;
             case "Instructions":
                 this.transitionTo(GameStateName.Instructions);
@@ -132,12 +142,14 @@ export default class TitleScreenState extends State {
         context.fillStyle = "#4CAF50";
         context.font = "bold 72px Arial";
         context.textAlign = "center";
-        context.fillText("STEALTH HEIST", width / 2, 140);
+        context.fillText("STEALTH HEIST", width / 2, 120);
         context.shadowBlur = 0;
 
-        let yPos = 240;
+        // Adjust menu starting position based on whether save info will be shown
+        const hasSave = this.saveInfo !== null;
+        let yPos = hasSave ? 180 : 220;
         const menuWidth = 300;
-        const menuHeight = 60;
+        const menuHeight = 50; // Slightly smaller
         const menuX = (width - menuWidth) / 2;
 
         this.menuOptions.forEach((option, index) => {
@@ -162,15 +174,58 @@ export default class TitleScreenState extends State {
                 index === this.selectedOption ? "#fff" : textColor;
             context.font =
                 index === this.selectedOption
-                    ? "bold 28px Arial"
-                    : "bold 24px Arial";
-            context.fillText(option.text, width / 2, yPos + 40);
+                    ? "bold 26px Arial"
+                    : "bold 22px Arial";
+            context.fillText(option.text, width / 2, yPos + 33);
 
-            yPos += 80;
+            yPos += 65; // Tighter spacing
         });
+
+        // Show save info if Continue is available (always show, not just when highlighted)
+        if (this.saveInfo) {
+            const infoY = hasSave
+                ? 180 + 65 * this.menuOptions.length + 10
+                : yPos;
+
+            context.fillStyle = "rgba(76, 175, 80, 0.15)";
+            context.fillRect(width / 2 - 180, infoY, 360, 80);
+            context.strokeStyle = "#4CAF50";
+            context.lineWidth = 2;
+            context.strokeRect(width / 2 - 180, infoY, 360, 80);
+
+            context.fillStyle = "#4CAF50";
+            context.font = "bold 14px Arial";
+            context.textAlign = "center";
+            context.fillText("SAVE DATA", width / 2, infoY + 18);
+
+            context.fillStyle = "#fff";
+            context.font = "13px Arial";
+            context.fillText(
+                `💰 Money: ${this.saveInfo.money}`,
+                width / 2,
+                infoY + 40
+            );
+            context.fillText(
+                `⏱️ Time: ${this.saveInfo.timeRemaining}`,
+                width / 2,
+                infoY + 58
+            );
+
+            // Only show delete hint when Continue is selected
+            if (this.selectedOption === 0) {
+                context.fillStyle = "#f44336";
+                context.font = "11px Arial";
+                context.fillText(
+                    `Press DELETE to erase save`,
+                    width / 2,
+                    infoY + 74
+                );
+            }
+        }
 
         context.fillStyle = "#555";
         context.font = "18px Arial";
+        context.textAlign = "center";
         context.fillText(
             "Use ↑↓ or WS to navigate, ENTER to select",
             width / 2,

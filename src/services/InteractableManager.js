@@ -41,7 +41,7 @@ export default class InteractableManager {
                 centerY: gridY + gridHeight / 2,
                 value: itemData.value,
                 type: itemData.type,
-                isCollected: false,
+                isCollected: false, // Default to not collected
             });
         });
 
@@ -72,6 +72,7 @@ export default class InteractableManager {
 
         // Find closest interactable within range
         for (const interactable of this.interactables) {
+            // CRITICAL: Skip if already collected
             if (interactable.isCollected) continue;
 
             const dx = interactable.centerX - playerPosition.x;
@@ -87,13 +88,26 @@ export default class InteractableManager {
 
     /**
      * Collect the current interactable
+     * Returns the item data with its index
      */
     collect() {
-        if (!this.currentInteractable || this.currentInteractable.isCollected) {
+        // CRITICAL: Multiple checks to prevent double-collection
+        if (!this.currentInteractable) {
+            console.warn("No current interactable to collect");
+            return null;
+        }
+
+        if (this.currentInteractable.isCollected) {
+            console.warn("Item already collected!");
             return null;
         }
 
         const interactable = this.currentInteractable;
+
+        // Get the index BEFORE marking as collected
+        const index = this.interactables.indexOf(interactable);
+
+        // Mark as collected FIRST
         interactable.isCollected = true;
 
         // Clear all tiles in the rectangular region
@@ -104,9 +118,14 @@ export default class InteractableManager {
             interactable.height
         );
 
+        // Clear current interactable reference
+        this.currentInteractable = null;
+
+        // Return item data WITH index
         return {
             value: interactable.value,
             type: interactable.type,
+            index: index, // <-- ADD THE INDEX HERE
         };
     }
 

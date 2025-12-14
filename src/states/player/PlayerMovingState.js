@@ -60,13 +60,10 @@ export default class PlayerMovingState extends State {
             const itemData = room.interactableManager.collect();
 
             if (itemData) {
-                // Add money to level
-                this.player.level.moneyCollected += itemData.value;
-                console.log(
-                    `Stole ${itemData.type} worth $${itemData.value}! Total: $${this.player.level.moneyCollected}`
-                );
-
-                // TODO: Play steal sound/animation
+                // Call the Level's callback instead of directly modifying money
+                if (room.onItemCollected) {
+                    room.onItemCollected(itemData);
+                }
             }
         }
     }

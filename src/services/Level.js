@@ -11,6 +11,7 @@ export default class Level {
     constructor() {
         this.rooms = new Map();
         this.currentRoom = null;
+        this.currentRoomName = null;
         this.player = null;
         this.moneyCollected = 0;
         this.quota = Level.QUOTA;
@@ -21,6 +22,9 @@ export default class Level {
 
         this.playerReachedExit = false;
         this.onPlayerCaught = null;
+
+        // Track collected items by unique ID (room_name:item_index)
+        this.collectedItems = new Set();
     }
 
     async loadRoom(roomName, jsonPath) {
@@ -37,6 +41,7 @@ export default class Level {
 
     setCurrentRoom(roomName, playerSpawnPosition = null) {
         this.currentRoom = this.rooms.get(roomName);
+        this.currentRoomName = roomName;
 
         setCanvasSize(
             this.currentRoom.pixelWidth,
@@ -49,12 +54,96 @@ export default class Level {
                 this
             );
         } else if (playerSpawnPosition) {
-            // Clone the vector to avoid reference issues
             this.player.position.x = playerSpawnPosition.x;
             this.player.position.y = playerSpawnPosition.y;
             this.player.canvasPosition.x = playerSpawnPosition.x * Tile.SIZE;
             this.player.canvasPosition.y = playerSpawnPosition.y * Tile.SIZE;
         }
+
+        // Apply collected items state to the new room
+        this.applyCollectedItemsToRoom();
+
+        // Set up the item collection callback for this room
+        this.setupItemCollectionCallback();
+    }
+
+    /**
+     * Mark items as collected in the current room based on saved state
+     */
+    applyCollectedItemsToRoom() {
+        if (!this.currentRoom || !this.currentRoom.interactableManager) {
+            return;
+        }
+
+        const interactables =
+            this.currentRoom.interactableManager.interactables;
+
+        interactables.forEach((item, index) => {
+            const itemId = `${this.currentRoomName}:${index}`;
+            if (this.collectedItems.has(itemId)) {
+                // IMPORTANT: Mark item as collected FIRST
+                item.isCollected = true;
+
+                // Then clear the tiles visually
+                this.currentRoom.interactableManager.clearRegion(
+                    item.x,
+                    item.y,
+                    item.width,
+                    item.height
+                );
+            }
+        });
+
+        console.log(
+            `Applied ${this.collectedItems.size} collected items to room ${this.currentRoomName}`
+        );
+    }
+
+    /**
+     * Set up the item collection callback for the current room
+     * Called once when entering a room
+     */
+    setupItemCollectionCallback() {
+        this.currentRoom.onItemCollected = (item) => {
+            console.log("onItemCollected triggered:", item);
+
+            // Get the index directly from the item (passed by InteractableManager)
+            const itemIndex = item.index;
+            const itemId = `${this.currentRoomName}:${itemIndex}`;
+
+            console.log(
+                `Attempting to collect item at index ${itemIndex} (${itemId})`
+            );
+
+            if (this.collectedItems.has(itemId)) {
+                console.warn(`Item ${itemId} was already collected! Skipping.`);
+                return;
+            }
+
+            this.moneyCollected += item.value;
+
+            // Mark item as collected in our persistent state
+            if (itemIndex !== -1 && itemIndex !== undefined) {
+                this.markItemCollected(itemIndex);
+                console.log(
+                    `Successfully collected item ${itemId} for $${item.value}`
+                );
+            } else {
+                console.error("Invalid item index!", itemIndex);
+            }
+        };
+    }
+
+    /**
+     * Mark an item as collected
+     * @param {number} itemIndex - Index of the item in the current room
+     */
+    markItemCollected(itemIndex) {
+        const itemId = `${this.currentRoomName}:${itemIndex}`;
+        this.collectedItems.add(itemId);
+        console.log(
+            `Marked item as collected: ${itemId}. Total collected: ${this.collectedItems.size}`
+        );
     }
 
     get collisionLayer() {
@@ -85,10 +174,6 @@ export default class Level {
                 this.transitionCooldown = this.transitionCooldownTime;
             }
         }
-
-        this.currentRoom.onItemCollected = (item) => {
-            this.moneyCollected += item.value;
-        };
     }
 
     render() {
@@ -152,5 +237,55 @@ export default class Level {
         if (this.moneyCollected >= this.quota) {
             this.playerReachedExit = true;
         }
+    }
+
+    /**
+     * Get the current game state for saving
+     */
+    getSaveState() {
+        const collectedItemsArray = Array.from(this.collectedItems);
+
+        console.log("Saving game state:", {
+            room: this.currentRoomName,
+            money: this.moneyCollected,
+            itemsCollected: collectedItemsArray.length,
+            items: collectedItemsArray,
+        });
+
+        return {
+            currentRoom: this.currentRoomName,
+            playerPosition: {
+                x: this.player.position.x,
+                y: this.player.position.y,
+            },
+            moneyCollected: this.moneyCollected,
+            collectedItems: collectedItemsArray,
+        };
+    }
+
+    /**
+     * Restore game state from save data
+     */
+    restoreSaveState(saveData) {
+        // Restore money
+        this.moneyCollected = saveData.moneyCollected || 0;
+
+        // Restore collected items
+        this.collectedItems = new Set(saveData.collectedItems || []);
+
+        console.log("Restored save state:", {
+            room: saveData.currentRoom,
+            money: this.moneyCollected,
+            itemsCollected: this.collectedItems.size,
+            items: Array.from(this.collectedItems),
+        });
+
+        // Set the current room with player position
+        const playerPos = new Vector(
+            saveData.playerPosition.x,
+            saveData.playerPosition.y
+        );
+
+        this.setCurrentRoom(saveData.currentRoom, playerPos);
     }
 }

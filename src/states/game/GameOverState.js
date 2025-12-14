@@ -9,6 +9,7 @@ import {
     stateMachine,
 } from "../../globals.js";
 import Input from "../../../lib/Input.js";
+import SaveManager from "../../services/SaveManager.js";
 
 export default class GameOverState extends State {
     constructor() {
@@ -26,6 +27,8 @@ export default class GameOverState extends State {
         this.moneyCollected = params.moneyCollected || 0;
         this.quota = params.quota || 10000;
         this.timeLeft = params.timeLeft || 0;
+
+        SaveManager.deleteSave();
     }
 
     update(dt) {
