@@ -12,6 +12,7 @@ export default class PlayerIdlingState extends State {
         super();
 
         this.player = player;
+        this.justEntered = false;
         this.animation = {
             [Direction.Up]: new Animation(
                 [6, 7, 8, 9, 10, 11],
@@ -35,9 +36,16 @@ export default class PlayerIdlingState extends State {
     enter() {
         this.player.sprites = this.player.idleSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
+        this.justEntered = true;
     }
 
     update() {
+        // Skip input checking on first frame to prevent stuck movement
+        if (this.justEntered) {
+            this.justEntered = false;
+            return;
+        }
+
         // Check for interaction
         if (input.isKeyPressed(Input.KEYS.E)) {
             this.handleInteraction();

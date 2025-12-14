@@ -97,6 +97,17 @@ export default class PlayState extends State {
     startNewGame() {
         this.timeRemaining = 600;
         this.timePlayed = 0;
+
+        this.level.moneyCollected = 0;
+        this.level.displayedMoney = 0;
+        this.level.collectedItems.clear();
+        this.level.playerReachedExit = false;
+
+        // Reset the money tween object if it exists
+        if (this.level.moneyTweenObject) {
+            this.level.moneyTweenObject.value = 0;
+        }
+
         this.level.setCurrentRoom(RoomName.MuseumEntrance, new Vector(14, 16));
 
         // Delete old save when starting new game

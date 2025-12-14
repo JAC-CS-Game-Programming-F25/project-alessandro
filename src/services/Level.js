@@ -288,10 +288,8 @@ export default class Level {
             this.player.position.y = 16;
             this.player.canvasPosition.x = 14 * Tile.SIZE;
             this.player.canvasPosition.y = 16 * Tile.SIZE;
-
-            console.log("Player tried to exit without enough money!");
         } else {
-            // Has enough money - allow exit
+            // Has enough money
             this.playerReachedExit = true;
         }
     }
@@ -301,13 +299,6 @@ export default class Level {
      */
     getSaveState() {
         const collectedItemsArray = Array.from(this.collectedItems);
-
-        console.log("Saving game state:", {
-            room: this.currentRoomName,
-            money: this.moneyCollected,
-            itemsCollected: collectedItemsArray.length,
-            items: collectedItemsArray,
-        });
 
         return {
             currentRoom: this.currentRoomName,
@@ -330,13 +321,6 @@ export default class Level {
 
         // Restore collected items
         this.collectedItems = new Set(saveData.collectedItems || []);
-
-        console.log("Restored save state:", {
-            room: saveData.currentRoom,
-            money: this.moneyCollected,
-            itemsCollected: this.collectedItems.size,
-            items: Array.from(this.collectedItems),
-        });
 
         // Set the current room with player position
         const playerPos = new Vector(

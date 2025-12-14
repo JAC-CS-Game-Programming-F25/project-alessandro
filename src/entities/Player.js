@@ -46,8 +46,14 @@ export default class Player extends GameEntity {
     update(dt) {
         super.update(dt);
 
-        this.canvasPosition.x += this.velocity.x * dt;
-        this.canvasPosition.y += this.velocity.y * dt;
+        // Only apply velocity if not in stealing or caught state
+        if (
+            this.stateMachine.currentState.name !== PlayerStateName.Stealing &&
+            this.stateMachine.currentState.name !== PlayerStateName.Caught
+        ) {
+            this.canvasPosition.x += this.velocity.x * dt;
+            this.canvasPosition.y += this.velocity.y * dt;
+        }
 
         this.position.x = Math.floor(this.canvasPosition.x / Tile.SIZE);
         this.position.y = Math.floor(this.canvasPosition.y / Tile.SIZE);

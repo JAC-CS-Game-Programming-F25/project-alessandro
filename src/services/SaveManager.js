@@ -29,10 +29,8 @@ export default class SaveManager {
                 JSON.stringify(saveData)
             );
 
-            console.log("Game saved successfully");
             return true;
         } catch (error) {
-            console.error("Failed to save game:", error);
             return false;
         }
     }
@@ -50,17 +48,8 @@ export default class SaveManager {
             }
 
             const saveData = JSON.parse(saveDataString);
-
-            // Validate save data
-            if (!saveData.currentRoom || !saveData.playerPosition) {
-                console.warn("Invalid save data, ignoring");
-                return null;
-            }
-
-            console.log("Game loaded successfully");
             return saveData;
         } catch (error) {
-            console.error("Failed to load game:", error);
             return null;
         }
     }
@@ -84,10 +73,8 @@ export default class SaveManager {
     static deleteSave() {
         try {
             localStorage.removeItem(SaveManager.SAVE_KEY);
-            console.log("Save deleted");
             return true;
         } catch (error) {
-            console.error("Failed to delete save:", error);
             return false;
         }
     }

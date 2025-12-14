@@ -2,6 +2,8 @@ import Animation from "../../../lib/Animation.js";
 import State from "../../../lib/State.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
+import { input } from "../../globals.js";
+import Input from "../../../lib/Input.js";
 
 export default class PlayerStealingState extends State {
     static STEAL_ANIMATION_TIME = 0.1;
@@ -38,12 +40,32 @@ export default class PlayerStealingState extends State {
         this.player.sprites = this.player.stealSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
         this.player.currentAnimation.refresh();
+
+        // Stop all movement during stealing
+        this.player.velocity.x = 0;
+        this.player.velocity.y = 0;
     }
 
     update(dt) {
         if (this.player.currentAnimation.isDone()) {
-            // Return to idle state
-            this.player.changeState(PlayerStateName.Idling);
+            // Check if player is still holding movement keys
+            const isMoving =
+                input.isKeyHeld(Input.KEYS.W) ||
+                input.isKeyHeld(Input.KEYS.A) ||
+                input.isKeyHeld(Input.KEYS.S) ||
+                input.isKeyHeld(Input.KEYS.D);
+
+            if (isMoving) {
+                // If holding movement keys, go to walking state
+                // Walking state will handle setting the velocity based on which keys are held
+                this.player.changeState(PlayerStateName.Walking);
+            } else if (input.isKeyHeld(Input.KEYS.SHIFT)) {
+                // If holding shift, go to crouch
+                this.player.changeState(PlayerStateName.Crouching);
+            } else {
+                // Otherwise go to idle
+                this.player.changeState(PlayerStateName.Idling);
+            }
         }
     }
 }
