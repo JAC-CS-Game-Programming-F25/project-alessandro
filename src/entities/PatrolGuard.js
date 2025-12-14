@@ -10,7 +10,6 @@ import Direction from "../enums/Direction.js";
 export default class PatrolGuard extends Guard {
     constructor(guardDefinition, level, waypoints = []) {
         super(guardDefinition, level);
-
         this.waypoints = waypoints;
         this.currentWaypointIndex = 0;
         this.moveSpeed = 30;
@@ -23,7 +22,6 @@ export default class PatrolGuard extends Guard {
             false
         );
 
-        // Setup animations
         this.walkAnimation = {
             [Direction.Up]: new Animation([6, 7, 8, 9, 10, 11], 0.15),
             [Direction.Down]: new Animation([18, 19, 20, 21, 22, 23], 0.15),

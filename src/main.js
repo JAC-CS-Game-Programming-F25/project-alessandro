@@ -2,8 +2,7 @@ import GameStateName from "./enums/GameStateName.js";
 import Game from "../lib/Game.js";
 import {
     canvas,
-    CANVAS_HEIGHT,
-    CANVAS_WIDTH,
+    setCanvasSize,
     context,
     fonts,
     images,
@@ -17,8 +16,7 @@ import VictoryState from "./states/game/VictoryState.js";
 import TitleScreenState from "./states/game/TitleScreenState.js";
 
 // Set the dimensions of the play area.
-canvas.width = CANVAS_WIDTH;
-canvas.height = CANVAS_HEIGHT;
+setCanvasSize(512, 704);
 canvas.setAttribute("tabindex", "1");
 
 document.body.appendChild(canvas);

@@ -37,8 +37,6 @@ export default class GuardFactory {
      * @returns {Guard|null}
      */
     createGuardFromObject(tiledObject, level) {
-        // Tiled gives us top-left corner in pixels
-        // Add half a tile to get the center, then convert to grid coordinates
         const centerX = tiledObject.x + tiledObject.width / 2;
         const centerY = tiledObject.y + tiledObject.height / 2;
 
@@ -53,10 +51,26 @@ export default class GuardFactory {
             this.getPropertyValue(tiledObject.properties, "direction") ||
             "down";
 
+        const detectionRange = this.getPropertyValue(
+            tiledObject.properties,
+            "detectionRange"
+        );
+        const detectionAngle = this.getPropertyValue(
+            tiledObject.properties,
+            "detectionAngle"
+        );
+
         const guardDefinition = {
             position: new Vector(gridX, gridY),
             direction: this.stringToDirection(direction),
         };
+
+        if (detectionRange !== null) {
+            guardDefinition.detectionRange = Number.parseFloat(detectionRange);
+        }
+        if (detectionAngle !== null) {
+            guardDefinition.detectionAngle = Number.parseFloat(detectionAngle);
+        }
 
         switch (guardType.toLowerCase()) {
             case GuardType.Patrol:
@@ -124,7 +138,9 @@ export default class GuardFactory {
      */
     parseWaypoints(waypointsStr) {
         return waypointsStr.split(";").map((point) => {
-            const [x, y] = point.split(",").map((n) => Number.parseFloat(n.trim()));
+            const [x, y] = point
+                .split(",")
+                .map((n) => Number.parseFloat(n.trim()));
             return new Vector(x, y);
         });
     }

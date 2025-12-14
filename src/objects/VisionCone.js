@@ -1,4 +1,3 @@
-import Vector from "../../lib/Vector.js";
 import Tile from "../services/Tile.js";
 import { context } from "../globals.js";
 
@@ -6,14 +5,29 @@ export default class VisionCone {
     constructor(position, direction, range, angle, smoothRotation = true) {
         this.position = position;
         this.direction = direction;
-        this.baseRange = range * Tile.SIZE * 0.95; // Store base range
-        this.range = this.baseRange; // Current range (can change)
+
+        const numericRange = Number.parseFloat(range);
+        const finalRange =
+            !Number.isNaN(numericRange) && numericRange > 0 ? numericRange : 5;
+
+        this.baseRange = finalRange * Tile.SIZE * 0.95; // Store base range
+        this.range = this.baseRange; // Current range (can be modified by multiplier)
+        this.detectionMultiplier = 1.0; // Default multiplier
+
         this.angle = angle;
         this.vertices = [];
-        this.currentRotation = 0;
-        this.targetRotation = 0;
         this.smoothRotation = smoothRotation;
         this.rotationSpeed = 180;
+
+        const directionToDegrees = {
+            0: -90,
+            1: 90,
+            2: 180,
+            3: 0,
+        };
+
+        this.currentRotation = directionToDegrees[direction];
+        this.targetRotation = this.currentRotation;
 
         this.update(position, direction);
     }
@@ -23,6 +37,7 @@ export default class VisionCone {
      * @param {number} multiplier - 1.0 for normal, 0.6 for crouching
      */
     setDetectionMultiplier(multiplier) {
+        this.detectionMultiplier = multiplier;
         this.range = this.baseRange * multiplier;
     }
 
@@ -97,12 +112,20 @@ export default class VisionCone {
         }
     }
 
-    containsPoint(x, y, multiplier = 1.0) {
-        // Use baseRange with multiplier for detection
-        const effectiveRange = this.baseRange * multiplier;
+    /**
+     * Check if a point is inside the vision cone AND has line of sight
+     * @param {number} x - Point X in pixels
+     * @param {number} y - Point Y in pixels
+     * @param {number} multiplier - Detection multiplier (0.6 for crouching)
+     * @param {Layer} collisionLayer - Collision layer to check walls
+     * @returns {boolean}
+     */
+    containsPoint(x, y, multiplier = 1.0, collisionLayer = null) {
+        const effectiveRange = this.range * multiplier;
         const centerX = this.position.x * Tile.SIZE + Tile.SIZE / 2;
         const centerY = this.position.y * Tile.SIZE + Tile.SIZE / 2;
 
+        // Check distance
         const dx = x - centerX;
         const dy = y - centerY;
         const distance = Math.hypot(dx, dy);
@@ -111,6 +134,7 @@ export default class VisionCone {
             return false;
         }
 
+        // Check angle
         const pointAngle = (Math.atan2(dy, dx) * 180) / Math.PI;
         const baseAngle = this.currentRotation;
         const halfAngle = this.angle / 2;
@@ -119,15 +143,63 @@ export default class VisionCone {
         while (angleDiff > 180) angleDiff -= 360;
         while (angleDiff < -180) angleDiff += 360;
 
-        return Math.abs(angleDiff) <= halfAngle;
+        if (Math.abs(angleDiff) > halfAngle) {
+            return false;
+        }
+
+        // Check line of sight (raycast from guard to player)
+        if (collisionLayer) {
+            if (!this.hasLineOfSight(centerX, centerY, x, y, collisionLayer)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Raycast from guard to target to check for walls
+     * @param {number} x1 - Start X (guard position)
+     * @param {number} y1 - Start Y (guard position)
+     * @param {number} x2 - End X (player position)
+     * @param {number} y2 - End Y (player position)
+     * @param {Layer} collisionLayer
+     * @returns {boolean} True if line of sight is clear
+     */
+    hasLineOfSight(x1, y1, x2, y2, collisionLayer) {
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Number of steps to check along the line
+        const steps = Math.ceil(distance / (Tile.SIZE / 2)); // Check every half-tile
+
+        for (let i = 0; i <= steps; i++) {
+            const t = i / steps;
+            const checkX = x1 + dx * t;
+            const checkY = y1 + dy * t;
+
+            // Convert to grid coordinates
+            const gridX = Math.floor(checkX / Tile.SIZE);
+            const gridY = Math.floor(checkY / Tile.SIZE);
+
+            // Check if there's a wall at this position
+            const tile = collisionLayer.getTile(gridX, gridY);
+            if (tile !== null && tile.id !== 0) {
+                return false; // Wall blocks line of sight
+            }
+        }
+
+        return true; // Clear line of sight
     }
 
     render() {
-        if (this.vertices.length < 3) return;
-
         context.save();
+        context.globalAlpha = 0.3;
+        context.fillStyle = "red";
+        context.strokeStyle = "darkred";
+        context.lineWidth = 2;
 
-        context.fillStyle = "rgba(255, 0, 0, 0.3)";
         context.beginPath();
         context.moveTo(this.vertices[0].x, this.vertices[0].y);
 
@@ -137,11 +209,7 @@ export default class VisionCone {
 
         context.closePath();
         context.fill();
-
-        context.strokeStyle = "rgba(255, 0, 0, 0.6)";
-        context.lineWidth = 2;
         context.stroke();
-
         context.restore();
     }
 }

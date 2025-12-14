@@ -27,7 +27,7 @@ export default class Layer {
     static generateTiles(layerData, sprites) {
         const tiles = [];
 
-        layerData.forEach((tileId) => {
+        layerData.forEach((tileId, index) => {
             // With multiple tilesets, we use the tile ID directly as the sprite index
             // 0 means there should be no tile at this location
             const tile = tileId === 0 ? null : new Tile(tileId, sprites);

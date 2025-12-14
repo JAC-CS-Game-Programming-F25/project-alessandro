@@ -40,7 +40,7 @@ export default class Item extends GameObject {
             [ItemType.Painting]: "#FF6B6B",
             [ItemType.Sculpture]: "#4ECDC4",
             [ItemType.Artifact]: "#FFE66D",
-            [ItemType.Jewel]: "#A8E6CF",
+            [ItemType.Souvenir]: "#A8E6CF",
         };
 
         context.fillStyle = colorMap[this.type] || "#FFFFFF";

@@ -57,10 +57,10 @@ export default class InteractableManager {
         const typeValue = typeProp.value.toLowerCase();
 
         const itemDataMap = {
-            painting: { type: ItemType.Painting, value: 1000 },
-            sculpture: { type: ItemType.Sculpture, value: 2000 },
+            painting: { type: ItemType.Painting, value: 200 },
+            sculpture: { type: ItemType.Sculpture, value: 1000 },
             artifact: { type: ItemType.Artifact, value: 500 },
-            jewel: { type: ItemType.Jewel, value: 3000 },
+            souvenir: { type: ItemType.Souvenir, value: 100 },
         };
 
         return itemDataMap[typeValue] || null;

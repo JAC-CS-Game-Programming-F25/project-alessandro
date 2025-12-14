@@ -1,29 +1,37 @@
-import Fonts from '../lib/Fonts.js';
-import Images from '../lib/Images.js';
-import Sounds from '../lib/Sounds.js';
-import StateMachine from '../lib/StateMachine.js';
-import Timer from '../lib/Timer.js';
-import Input from '../lib/Input.js';
+import Fonts from "../lib/Fonts.js";
+import Images from "../lib/Images.js";
+import Sounds from "../lib/Sounds.js";
+import StateMachine from "../lib/StateMachine.js";
+import Timer from "../lib/Timer.js";
+import Input from "../lib/Input.js";
 
-export const canvas = document.createElement('canvas');
+export const canvas = document.createElement("canvas");
 export const context =
-	canvas.getContext('2d') || new CanvasRenderingContext2D();
+    canvas.getContext("2d") || new CanvasRenderingContext2D();
 
 // Replace these values according to how big you want your canvas.
-export const CANVAS_WIDTH = 512;
-export const CANVAS_HEIGHT = 704;
+export let CANVAS_WIDTH = 512;
+export let CANVAS_HEIGHT = 704;
+
+export function setCanvasSize(width, height) {
+    CANVAS_WIDTH = width;
+    CANVAS_HEIGHT = height;
+    canvas.width = width;
+    canvas.height = height;
+    resizeCanvas();
+}
 
 const resizeCanvas = () => {
-	const scaleX = window.innerWidth / CANVAS_WIDTH;
-	const scaleY = window.innerHeight / CANVAS_HEIGHT;
-	const scale = Math.min(scaleX, scaleY); // Maintain aspect ratio
+    const scaleX = window.innerWidth / CANVAS_WIDTH;
+    const scaleY = window.innerHeight / CANVAS_HEIGHT;
+    const scale = Math.min(scaleX, scaleY); // Maintain aspect ratio
 
-	canvas.style.width = `${CANVAS_WIDTH * scale}px`;
-	canvas.style.height = `${CANVAS_HEIGHT * scale}px`;
+    canvas.style.width = `${CANVAS_WIDTH * scale}px`;
+    canvas.style.height = `${CANVAS_HEIGHT * scale}px`;
 };
 
 // Listen for canvas resize events
-window.addEventListener('resize', resizeCanvas);
+window.addEventListener("resize", resizeCanvas);
 
 resizeCanvas(); // Call once to scale initially
 

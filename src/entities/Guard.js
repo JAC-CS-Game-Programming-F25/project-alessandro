@@ -9,11 +9,12 @@ import ImageName from "../enums/ImageName.js";
 export default class Guard extends GameEntity {
     constructor(guardDefinition = {}, level) {
         super(guardDefinition);
-
         this.level = level;
         this.dimensions = new Vector(GameEntity.WIDTH, GameEntity.HEIGHT);
+
         this.detectionRange = guardDefinition.detectionRange ?? 5;
         this.detectionAngle = guardDefinition.detectionAngle ?? 60;
+
         this.visionCone = null;
 
         // Load guard sprites
@@ -69,10 +70,14 @@ export default class Guard extends GameEntity {
 
         const detectionMultiplier = player.isCrouching ? 0.6 : 1.0;
 
+        // Pass the collision layer for line-of-sight checking
+        const collisionLayer = this.level?.collisionLayer;
+
         return this.visionCone.containsPoint(
             player.canvasPosition.x + 16,
             player.canvasPosition.y + 32,
-            detectionMultiplier
+            detectionMultiplier,
+            collisionLayer
         );
     }
 }

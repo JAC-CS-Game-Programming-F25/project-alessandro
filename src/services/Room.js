@@ -2,6 +2,8 @@ import Layer from "./Layer.js";
 import TilesetManager from "./TilesetManager.js";
 import GuardFactory from "./GuardFactory.js";
 import InteractableManager from "./InteractableManager.js";
+import Tile from "./Tile.js";
+import RoomTransition from "./RoomTransition.js";
 
 export default class Room {
     /**
@@ -14,6 +16,9 @@ export default class Room {
         this.name = roomName;
         this.width = roomDefinition.width;
         this.height = roomDefinition.height;
+
+        this.pixelWidth = this.width * Tile.SIZE;
+        this.pixelHeight = this.height * Tile.SIZE;
 
         const sprites = tilesetManager.loadSpritesForRoom(roomDefinition);
 
@@ -38,6 +43,9 @@ export default class Room {
         const guardsLayer = roomDefinition.layers.find(
             (l) => l.name === "Guards"
         );
+        const transitionsLayer = roomDefinition.layers.find(
+            (l) => l.name === "Room-Transitions"
+        );
 
         this.floorLayer = new Layer(floorLayer, sprites);
         this.wallCollisionLayer = new Layer(wallCollisionLayer, sprites);
@@ -54,6 +62,8 @@ export default class Room {
             roomDefinition.height,
             [this.wallCollisionLayer, this.objectCollisionLayer]
         );
+        this.roomTransition = new RoomTransition(null);
+        this.roomTransition.loadTransitions(transitionsLayer);
 
         this.itemsObjectLayer = itemsLayer;
         this.interactableManager = new InteractableManager(this);
@@ -107,12 +117,21 @@ export default class Room {
     }
 
     update(dt, player, level) {
+        if (!player || !level) {
+            console.error("Room.update: Missing player or level!");
+            return;
+        }
+
+        // Update interactable manager
         this.interactableManager.update(player.position);
 
-        this.guards.forEach((guard) => {
-            guard.level = level;
-            guard.update(dt);
-        });
+        // Update guards
+        if (this.guards && this.guards.length > 0) {
+            this.guards.forEach((guard) => {
+                guard.level = level;
+                guard.update(dt);
+            });
+        }
     }
 
     render() {

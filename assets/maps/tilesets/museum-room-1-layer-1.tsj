@@ -1,0 +1,14 @@
+{ "columns":16,
+ "image":"..\/..\/images\/room-tilesets\/Museum_room_1_layer_1_32x32.png",
+ "imageheight":1056,
+ "imagewidth":512,
+ "margin":0,
+ "name":"museum-room-1-layer-1",
+ "spacing":0,
+ "tilecount":528,
+ "tiledversion":"1.11.2",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":"1.10"
+}

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="16" height="22" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="23">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="16" height="22" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="28">
+ <editorsettings>
+  <export target="museum-entrance.tmx" format="tmx"/>
+ </editorsettings>
  <tileset firstgid="1" source="tilesets/museum-entrance-layer-1.tsj"/>
  <tileset firstgid="353" source="tilesets/room-builder.tsj"/>
  <tileset firstgid="8941" source="tilesets/museum-entrance-layer-2.tsj"/>
@@ -21,8 +24,8 @@
 0,210,211,212,213,214,215,0,217,218,0,220,221,222,223,224,
 0,226,227,228,229,230,231,0,233,234,0,0,0,0,0,240,
 0,242,243,244,245,246,247,248,249,250,0,0,0,0,0,256,
-257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,
-0,274,275,276,277,278,279,0,281,282,283,284,285,286,287,288,
+257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,271,
+0,274,275,276,277,278,279,0,281,282,283,284,285,286,287,271,
 0,290,291,292,293,294,295,0,297,298,3893,0,0,0,0,304,
 0,306,307,308,309,310,311,0,313,314,0,316,317,318,319,320,
 0,322,323,324,325,326,327,0,329,330,0,332,333,334,335,336,
@@ -45,11 +48,11 @@
 177,178,179,0,0,0,0,0,0,0,0,0,0,0,0,192,
 193,194,195,196,197,198,199,200,0,0,203,204,205,206,207,208,
 209,0,0,0,0,0,0,216,0,0,219,0,0,0,0,0,
-225,0,0,0,0,0,0,232,0,0,235,236,237,238,239,0,
-241,0,0,0,0,0,0,0,0,0,251,252,253,254,255,0,
+225,0,0,0,0,0,0,232,0,0,235,236,237,238,239,239,
+241,0,0,0,0,0,0,0,0,0,251,252,253,254,255,255,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-289,0,0,0,0,0,0,296,0,0,0,0,0,0,0,0,
+289,0,0,0,0,0,0,296,0,0,0,0,0,0,0,239,
 305,0,0,0,0,0,0,312,0,0,315,204,205,206,207,208,
 321,0,0,0,0,0,0,328,0,0,331,0,0,0,0,0,
 337,338,339,340,341,342,343,344,0,0,0,0,0,0,0,0
@@ -81,6 +84,20 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="10" name="Room-Transitions">
+  <object id="24" x="0" y="511.75" width="31.25" height="64.75">
+   <properties>
+    <property name="spawnX" value="14"/>
+    <property name="spawnY" value="23"/>
+    <property name="targetRoom" value="museum-room-1"/>
+   </properties>
+  </object>
+  <object id="25" x="480" y="511.75" width="31.75" height="64.25">
+   <properties>
+    <property name="targetRoom" value="exit"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="9" name="Guards">
   <object id="16" x="159.5" y="128" width="32" height="31.5">
    <properties>

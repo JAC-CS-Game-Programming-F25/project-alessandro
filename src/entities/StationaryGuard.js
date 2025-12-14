@@ -19,10 +19,9 @@ export default class StationaryGuard extends Guard {
 
         this.rotationSpeed = rotationSpeed;
         this.rotationAngle = 0;
-        this.primaryDirection = primaryDirection ?? guardDefinition.direction; // Direction guard favors
-        this.primaryDirectionChance = 0.7;
+        this.primaryDirection = primaryDirection ?? guardDefinition.direction;
+        this.primaryDirectionChance = 0.85;
 
-        // Smooth rotation for stationary guards
         this.visionCone = new VisionCone(
             this.position,
             this.direction,

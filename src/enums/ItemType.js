@@ -2,7 +2,7 @@ const ItemType = {
     Painting: "painting",
     Sculpture: "sculpture",
     Artifact: "artifact",
-    Jewel: "jewel",
+    Souvenir: "souvenir",
 };
 
 export default ItemType;

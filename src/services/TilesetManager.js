@@ -18,6 +18,14 @@ export default class TilesetManager {
         return {
             "museum-entrance-layer-1.tsj": "museum-entrance-layer-1",
             "museum-entrance-layer-2.tsj": "museum-entrance-layer-2",
+            "museum-room-1-layer-1.tsj": "museum-room-1-layer-1",
+            "museum-room-1-layer-2.tsj": "museum-room-1-layer-2",
+            "museum-room-2-layer-1.tsj": "museum-room-2-layer-1",
+            "museum-room-2-layer-2.tsj": "museum-room-2-layer-2",
+            "museum-room-3-layer-1.tsj": "museum-room-3-layer-1",
+            "museum-room-3-layer-2.tsj": "museum-room-3-layer-2",
+            "museum-room-4-layer-1.tsj": "museum-room-4-layer-1",
+            "museum-room-4-layer-2.tsj": "museum-room-4-layer-2",
             "room-builder.tsj": "room-builder",
         };
     }
@@ -28,22 +36,27 @@ export default class TilesetManager {
      * @returns {array} Array of sprites indexed by global tile ID
      */
     loadSpritesForRoom(roomDefinition) {
-        // Find the maximum tile ID used in this room to size our array
-        const maxTileId = this.getMaxTileId(roomDefinition);
-        const allSprites = new Array(maxTileId + 1).fill(null);
+        if (!roomDefinition.tilesets || roomDefinition.tilesets.length === 0) {
+            console.warn("No tilesets found in room definition");
+            return {};
+        }
 
-        // Process each tileset
+        const allSprites = {};
+
         roomDefinition.tilesets.forEach((tilesetRef) => {
             const sprites = this.loadTilesetSprites(tilesetRef);
             const firstGid = tilesetRef.firstgid;
 
-            // Place sprites at the correct indices based on firstgid
             sprites.forEach((sprite, index) => {
                 const globalId = firstGid + index;
-                allSprites[globalId] = sprite;
+                allSprites[globalId] = sprite; // Store in object by ID
             });
         });
 
+        console.log(
+            "Loaded sprites for tile IDs:",
+            Object.keys(allSprites).length
+        );
         return allSprites;
     }
 
@@ -53,17 +66,34 @@ export default class TilesetManager {
      * @returns {array} Array of sprites for this tileset
      */
     loadTilesetSprites(tilesetRef) {
-        // Extract the tileset filename from the source path
-        // e.g., "../assets/maps/tilesets/museum-entrance-layer-1.tsj" -> "museum-entrance-layer-1.tsj"
         const tilesetFileName = this.extractFileName(tilesetRef.source);
+        console.log("Loading tileset:", tilesetFileName);
 
-        // Look up the image name from our mapping
         const imageName = this.tilesetMapping[tilesetFileName];
 
-        // Get the image
+        if (!imageName) {
+            console.error(
+                `No image mapping found for tileset: ${tilesetFileName}`
+            );
+            console.log(
+                "Available mappings:",
+                Object.keys(this.tilesetMapping)
+            );
+            return [];
+        }
+
+        console.log("Mapped to image name:", imageName);
+
         const image = images.get(imageName);
 
-        // Generate sprites from the tileset image
+        if (!image) {
+            console.error(`Image not loaded: ${imageName}`);
+            console.log("Available images:", images); // Check what's loaded
+            return [];
+        }
+
+        console.log("Generating sprites from image:", imageName);
+
         return Sprite.generateSpritesFromSpriteSheet(
             image,
             Tile.SIZE,

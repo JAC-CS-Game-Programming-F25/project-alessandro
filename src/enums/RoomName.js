@@ -1,8 +1,9 @@
 const RoomName = {
     MuseumEntrance: "museum-entrance",
-    GalleryWest: "gallery-west",
-    GalleryEast: "gallery-east",
-    VaultRoom: "vault-room",
+    MuseumRoom1: "museum-room-1",
+    MuseumRoom2: "museum-room-2",
+    MuseumRoom3: "museum-room-3",
+    MuseumRoom4: "museum-room-4",
 };
 
 export default RoomName;

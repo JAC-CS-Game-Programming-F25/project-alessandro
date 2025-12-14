@@ -19,6 +19,54 @@
             "height": 3616
         },
         {
+            "name": "museum-room-1-layer-1",
+            "path": "./assets/images/room-tilesets/Museum_room_1_layer_1_32x32.png",
+            "width": 512,
+            "height": 1056
+        },
+        {
+            "name": "museum-room-1-layer-2",
+            "path": "./assets/images/room-tilesets/Museum_room_1_layer_2_32x32.png",
+            "width": 512,
+            "height": 1056
+        },
+        {
+            "name": "museum-room-2-layer-1",
+            "path": "./assets/images/room-tilesets/Museum_room_2_layer_1_32x32.png",
+            "width": 512,
+            "height": 320
+        },
+        {
+            "name": "museum-room-2-layer-2",
+            "path": "./assets/images/room-tilesets/Museum_room_2_layer_2_32x32.png",
+            "width": 512,
+            "height": 320
+        },
+        {
+            "name": "museum-room-3-layer-1",
+            "path": "./assets/images/room-tilesets/Museum_room_3_layer_1_32x32.png",
+            "width": 544,
+            "height": 672
+        },
+        {
+            "name": "museum-room-3-layer-2",
+            "path": "./assets/images/room-tilesets/Museum_room_3_layer_2_32x32.png",
+            "width": 544,
+            "height": 672
+        },
+        {
+            "name": "museum-room-4-layer-1",
+            "path": "./assets/images/room-tilesets/Museum_room_4_layer_1_32x32.png",
+            "width": 640,
+            "height": 544
+        },
+        {
+            "name": "museum-room-4-layer-2",
+            "path": "./assets/images/room-tilesets/Museum_room_4_layer_2_32x32.png",
+            "width": 640,
+            "height": 544
+        },
+        {
             "name": "thief-idle",
             "path": "./assets/images/thief-idle.png",
             "width": 768,

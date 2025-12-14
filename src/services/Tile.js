@@ -13,7 +13,6 @@ export default class Tile {
     }
 
     render(x, y) {
-        // Use the tile ID directly to index into the sprite array
         const sprite = this.sprites[this.id];
 
         if (sprite) {
