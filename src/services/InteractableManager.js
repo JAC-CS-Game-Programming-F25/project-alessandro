@@ -1,6 +1,7 @@
 import Tile from "./Tile.js";
 import ItemType from "../enums/ItemType.js";
 import { context } from "../globals.js";
+import ItemValue from "../enums/ItemValue.js";
 
 /**
  * Manages interactable items in a room
@@ -91,10 +92,10 @@ export default class InteractableManager {
         const typeValue = typeProp.value.toLowerCase();
 
         const itemDataMap = {
-            painting: { type: ItemType.Painting, value: 200 },
-            sculpture: { type: ItemType.Sculpture, value: 1000 },
-            artifact: { type: ItemType.Artifact, value: 500 },
-            souvenir: { type: ItemType.Souvenir, value: 100 },
+            painting: { type: ItemType.Painting, value: ItemValue.Painting },
+            sculpture: { type: ItemType.Sculpture, value: ItemValue.Sculpture },
+            artifact: { type: ItemType.Artifact, value: ItemValue.Artifact },
+            souvenir: { type: ItemType.Souvenir, value: ItemValue.Souvenir },
         };
 
         return itemDataMap[typeValue] || null;
