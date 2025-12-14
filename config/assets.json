@@ -79,6 +79,18 @@
             "height": 64
         },
         {
+            "name": "thief-steal",
+            "path": "./assets/images/thief-steal.png",
+            "width": 1536,
+            "height": 64
+        },
+        {
+            "name": "thief-caught",
+            "path": "./assets/images/thief-caught.png",
+            "width": 416,
+            "height": 64
+        },
+        {
             "name": "guard-idle",
             "path": "./assets/images/guard-idle.png",
             "width": 768,

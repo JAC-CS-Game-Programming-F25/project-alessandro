@@ -10,6 +10,8 @@ import Character from "../enums/Character.js";
 import Map from "../services/Map.js";
 import Tile from "../services/Tile.js";
 import PlayerCrouchingState from "../states/player/PlayerCrouchingState.js";
+import PlayerCaughtState from "../states/player/PlayerCaughtState.js";
+import PlayerStealingState from "../states/player/PlayerStealingState.js";
 
 export default class Player extends GameEntity {
     /**
@@ -32,7 +34,9 @@ export default class Player extends GameEntity {
         this.stateMachine = this.initializeStateMachine();
 
         this.idleSprites = this.initializeSprites(Character.ThiefIdle);
-		this.walkSprites = this.initializeSprites(Character.ThiefWalk);
+        this.walkSprites = this.initializeSprites(Character.ThiefWalk);
+        this.stealSprites = this.initializeSprites(Character.ThiefSteal);
+        this.caughtSprites = this.initializeSprites(Character.ThiefCaught);
 
         this.sprites = this.idleSprites;
         this.currentAnimation =
@@ -74,6 +78,11 @@ export default class Player extends GameEntity {
             PlayerStateName.Crouching,
             new PlayerCrouchingState(this)
         );
+        stateMachine.add(
+            PlayerStateName.Stealing,
+            new PlayerStealingState(this)
+        );
+        stateMachine.add(PlayerStateName.Caught, new PlayerCaughtState(this));
 
         stateMachine.change(PlayerStateName.Idling);
 

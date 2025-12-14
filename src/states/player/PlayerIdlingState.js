@@ -71,10 +71,11 @@ export default class PlayerIdlingState extends State {
         const room = this.player.level.currentRoom;
 
         if (room.interactableManager.canInteract()) {
+            this.player.changeState(PlayerStateName.Stealing);
+
             const itemData = room.interactableManager.collect();
 
             if (itemData) {
-                // Call the Level's callback instead of directly modifying money
                 if (room.onItemCollected) {
                     room.onItemCollected(itemData);
                 }

@@ -1,4 +1,5 @@
 import State from "../../../lib/State.js";
+import PlayerStateName from "../../enums/PlayerStateName.js";
 
 export default class GuardAlertState extends State {
     /**
@@ -12,8 +13,16 @@ export default class GuardAlertState extends State {
     }
 
     enter() {
-        if (this.guard.level && this.guard.level.onPlayerCaught) {
-            this.guard.level.onPlayerCaught();
+        // Play caught animation on player
+        if (this.guard.level?.player) {
+            this.guard.level.player.changeState(PlayerStateName.Caught);
+        }
+
+        // Trigger game over after a brief delay
+        if (this.guard.level?.onPlayerCaught) {
+            setTimeout(() => {
+                this.guard.level.onPlayerCaught();
+            }, 500);
         }
     }
 

@@ -5,6 +5,7 @@ import Input from "../../../lib/Input.js";
 import { input } from "../../globals.js";
 import Tile from "../../services/Tile.js";
 import GameEntity from "../../entities/GameEntity.js";
+import PlayerStateName from "../../enums/PlayerStateName.js";
 
 export default class PlayerMovingState extends State {
     constructor(player, speed, animationTime) {
@@ -57,10 +58,11 @@ export default class PlayerMovingState extends State {
         const room = this.player.level.currentRoom;
 
         if (room.interactableManager.canInteract()) {
+            this.player.changeState(PlayerStateName.Stealing);
+
             const itemData = room.interactableManager.collect();
 
             if (itemData) {
-                // Call the Level's callback instead of directly modifying money
                 if (room.onItemCollected) {
                     room.onItemCollected(itemData);
                 }

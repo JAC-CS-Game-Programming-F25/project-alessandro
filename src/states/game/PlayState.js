@@ -7,6 +7,7 @@ import GameStateName from "../../enums/GameStateName.js";
 import SaveManager from "../../services/SaveManager.js";
 import { input, context, canvas, stateMachine } from "../../globals.js";
 import Input from "../../../lib/Input.js";
+import PlayerStateName from "../../enums/PlayerStateName.js";
 
 export default class PlayState extends State {
     constructor() {
@@ -67,6 +68,12 @@ export default class PlayState extends State {
         } else {
             // Start fresh game
             this.startNewGame();
+        }
+
+        if (this.level.player) {
+            this.level.player.changeState(PlayerStateName.Idling);
+            this.level.player.velocity.x = 0;
+            this.level.player.velocity.y = 0;
         }
 
         // Store timer in level for HUD access
@@ -156,7 +163,7 @@ export default class PlayState extends State {
         this.hud.render();
 
         // DEBUG: Show interaction ranges (set to true to enable)
-        const DEBUG_INTERACTIONS = true; // <-- Set this to true
+        const DEBUG_INTERACTIONS = false;
         if (DEBUG_INTERACTIONS && this.level.currentRoom && this.level.player) {
             this.level.currentRoom.interactableManager.renderDebug(
                 this.level.player.position

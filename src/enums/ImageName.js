@@ -12,6 +12,8 @@ const ImageName = {
     MuseumRoom4Layer2: "museum-room-4-layer-2",
     ThiefIdle: "thief-idle",
     ThiefWalk: "thief-walk",
+    ThiefSteal: "thief-steal",
+    ThiefCaught: "thief-caught",
     GuardIdle: "guard-idle",
     GuardWalk: "guard-walk",
 };
