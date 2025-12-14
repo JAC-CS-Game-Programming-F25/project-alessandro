@@ -209,13 +209,25 @@ export default class InteractableManager {
     /**
      * Render interaction prompt above the item
      */
+    /**
+     * Render interaction prompt above the item
+     */
     renderPrompt() {
         if (!this.canInteract()) return;
 
         const interactable = this.currentInteractable;
 
+        // Format the prompt text with value
+        const promptText = `Press E - $${interactable.value}`;
+
+        // Measure text width to adjust box size dynamically
+        context.save();
+        context.font = "bold 12px Arial";
+        const textWidth = context.measureText(promptText).width;
+        context.restore();
+
         // Position prompt above the TOP-LEFT corner of the bounding box
-        const promptWidth = 60;
+        const promptWidth = textWidth + 16; // Add padding
         const promptHeight = 20;
 
         // Center the prompt horizontally over the item
@@ -252,7 +264,7 @@ export default class InteractableManager {
         context.font = "bold 12px Arial";
         context.textAlign = "center";
         context.textBaseline = "middle";
-        context.fillText("Press E", promptX, promptY);
+        context.fillText(promptText, promptX, promptY);
 
         context.restore();
     }
