@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="16" height="22" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="28">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="16" height="22" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="36">
  <editorsettings>
-  <export target="museum-entrance.tmx" format="tmx"/>
+  <export target="../../config/museum-entrance.json" format="json"/>
  </editorsettings>
  <tileset firstgid="1" source="tilesets/museum-entrance-layer-1.tsj"/>
  <tileset firstgid="353" source="tilesets/room-builder.tsj"/>
@@ -130,6 +130,41 @@
    </properties>
   </object>
   <object id="22" x="428.364" y="280.182" width="39.8182" height="36.1818">
+   <properties>
+    <property name="type" value="artifact"/>
+   </properties>
+  </object>
+  <object id="28" x="192" y="34" width="32" height="46.25">
+   <properties>
+    <property name="type" value="painting"/>
+   </properties>
+  </object>
+  <object id="29" x="351.5" y="33.75" width="32.75" height="46.5">
+   <properties>
+    <property name="type" value="painting"/>
+   </properties>
+  </object>
+  <object id="30" x="395.75" y="56.5" width="40.5" height="35">
+   <properties>
+    <property name="type" value="artifact"/>
+   </properties>
+  </object>
+  <object id="31" x="267.25" y="184" width="40.75" height="36">
+   <properties>
+    <property name="type" value="artifact"/>
+   </properties>
+  </object>
+  <object id="32" x="388.25" y="284" width="23.75" height="34.75">
+   <properties>
+    <property name="type" value="artifact"/>
+   </properties>
+  </object>
+  <object id="33" x="164.5" y="284" width="23" height="33.75">
+   <properties>
+    <property name="type" value="artifact"/>
+   </properties>
+  </object>
+  <object id="34" x="107.5" y="280.5" width="40.75" height="35.5">
    <properties>
     <property name="type" value="artifact"/>
    </properties>

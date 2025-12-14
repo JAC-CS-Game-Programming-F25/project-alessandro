@@ -288,6 +288,125 @@
                  "width":39.8182,
                  "x":428.364,
                  "y":280.182
+                }, 
+                {
+                 "height":46.25,
+                 "id":28,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"painting"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":192,
+                 "y":34
+                }, 
+                {
+                 "height":46.5,
+                 "id":29,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"painting"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32.75,
+                 "x":351.5,
+                 "y":33.75
+                }, 
+                {
+                 "height":35,
+                 "id":30,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"artifact"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":40.5,
+                 "x":395.75,
+                 "y":56.5
+                }, 
+                {
+                 "height":36,
+                 "id":31,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"artifact"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":40.75,
+                 "x":267.25,
+                 "y":184
+                }, 
+                {
+                 "height":34.75,
+                 "id":32,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"artifact"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":23.75,
+                 "x":388.25,
+                 "y":284
+                }, 
+                {
+                 "height":33.75,
+                 "id":33,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"artifact"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":23,
+                 "x":164.5,
+                 "y":284
+                }, 
+                {
+                 "height":35.5,
+                 "id":34,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"artifact"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":40.75,
+                 "x":107.5,
+                 "y":280.5
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -362,7 +481,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":28,
+ "nextobjectid":35,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

@@ -128,7 +128,7 @@
                  "visible":true,
                  "width":32,
                  "x":512,
-                 "y":542.666666666667
+                 "y":542.667
                 }, 
                 {
                  "height":65,
@@ -153,9 +153,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32.3333333333333,
+                 "width":32.3333,
                  "x":0,
-                 "y":543.333333333333
+                 "y":543.333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -169,7 +169,7 @@
          "name":"Guards",
          "objects":[
                 {
-                 "height":32.6666666666666,
+                 "height":32.6667,
                  "id":2,
                  "name":"",
                  "properties":[
@@ -191,8 +191,8 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":33.3333333333333,
-                 "x":191.333333333333,
+                 "width":33.3333,
+                 "x":191.333,
                  "y":352
                 }, 
                 {
@@ -218,7 +218,7 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32.6666666666666,
+                 "width":32.6667,
                  "x":320,
                  "y":352
                 }, 
@@ -240,12 +240,12 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":33.3333333333333,
-                 "x":159.333333333333,
+                 "width":33.3333,
+                 "x":159.333,
                  "y":640
                 }, 
                 {
-                 "height":30.6666666666666,
+                 "height":30.6667,
                  "id":5,
                  "name":"",
                  "properties":[
@@ -264,7 +264,7 @@
                  "visible":true,
                  "width":32,
                  "x":352,
-                 "y":640.666666666667
+                 "y":640.667
                 }, 
                 {
                  "height":32,
@@ -290,11 +290,11 @@
                  "type":"",
                  "visible":true,
                  "width":34,
-                 "x":62.6666666666667,
+                 "x":62.6667,
                  "y":256
                 }, 
                 {
-                 "height":33.3333333333333,
+                 "height":33.3333,
                  "id":7,
                  "name":"",
                  "properties":[
@@ -311,9 +311,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32.6666666666667,
-                 "x":159.333333333333,
-                 "y":126.666666666667
+                 "width":32.6667,
+                 "x":159.333,
+                 "y":126.667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -327,7 +327,7 @@
          "name":"Collectible-Items",
          "objects":[
                 {
-                 "height":41.3333333333333,
+                 "height":41.3333,
                  "id":9,
                  "name":"",
                  "properties":[
@@ -341,7 +341,7 @@
                  "visible":true,
                  "width":76,
                  "x":390,
-                 "y":63.3333333333333
+                 "y":63.3333
                 }, 
                 {
                  "height":40,
@@ -358,10 +358,10 @@
                  "visible":true,
                  "width":80,
                  "x":70,
-                 "y":257.333333333333
+                 "y":257.333
                 }, 
                 {
-                 "height":65.3333333333333,
+                 "height":65.3333,
                  "id":11,
                  "name":"",
                  "properties":[
@@ -373,12 +373,12 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":122.666666666667,
+                 "width":122.667,
                  "x":344,
-                 "y":355.333333333333
+                 "y":355.333
                 }, 
                 {
-                 "height":56.6666666666666,
+                 "height":56.6667,
                  "id":12,
                  "name":"",
                  "properties":[
@@ -391,11 +391,11 @@
                  "type":"",
                  "visible":true,
                  "width":128,
-                 "x":350.666666666667,
+                 "x":350.667,
                  "y":472
                 }, 
                 {
-                 "height":48.6666666666667,
+                 "height":48.6667,
                  "id":13,
                  "name":"",
                  "properties":[
@@ -407,9 +407,60 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":90.6666666666667,
-                 "x":63.3333333333333,
-                 "y":479.333333333333
+                 "width":90.6667,
+                 "x":63.3333,
+                 "y":479.333
+                }, 
+                {
+                 "height":80,
+                 "id":15,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"sculpture"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":137.333333333333,
+                 "x":72.6666666666667,
+                 "y":337.333333333333
+                }, 
+                {
+                 "height":31.3333333333334,
+                 "id":16,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"sculpture"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":72,
+                 "x":394.666666666667,
+                 "y":264.666666666667
+                }, 
+                {
+                 "height":98.6666666666667,
+                 "id":18,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"sculpture"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":138.666666666667,
+                 "x":206.666666666667,
+                 "y":36
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -482,7 +533,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":15,
+ "nextobjectid":19,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

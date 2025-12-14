@@ -71,7 +71,7 @@
          "name":"Room-Transitions",
          "objects":[
                 {
-                 "height":65.7028761161215,
+                 "height":65.7029,
                  "id":1,
                  "name":"",
                  "properties":[
@@ -93,9 +93,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32.1622470498497,
-                 "x":479.21748104276,
-                 "y":222.838425988244
+                 "width":32.1622,
+                 "x":479.217,
+                 "y":222.838
                 }, 
                 {
                  "height":64.25,
@@ -105,12 +105,12 @@
                         {
                          "name":"spawnX",
                          "type":"string",
-                         "value":"15"
+                         "value":"14"
                         }, 
                         {
                          "name":"spawnY",
                          "type":"string",
-                         "value":"17"
+                         "value":"18"
                         }, 
                         {
                          "name":"targetRoom",
@@ -201,23 +201,6 @@
          "name":"Collectible-Items",
          "objects":[
                 {
-                 "height":33.5,
-                 "id":4,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"souvenir"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":44,
-                 "x":159.5,
-                 "y":63.5
-                }, 
-                {
                  "height":50,
                  "id":5,
                  "name":"",
@@ -235,25 +218,93 @@
                  "y":48
                 }, 
                 {
-                 "height":33,
-                 "id":6,
+                 "height":77,
+                 "id":9,
                  "name":"",
                  "properties":[
                         {
                          "name":"type",
                          "type":"string",
-                         "value":"artifact"
+                         "value":"souvenir"
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32.5,
-                 "x":96,
-                 "y":256
+                 "width":93.6666666666667,
+                 "x":257.666666666667,
+                 "y":19
                 }, 
                 {
-                 "height":26,
-                 "id":7,
+                 "height":51.6666666666667,
+                 "id":10,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"souvenir"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":92.6666666666667,
+                 "x":160,
+                 "y":56.3333333333333
+                }, 
+                {
+                 "height":54.3333333333333,
+                 "id":11,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"souvenir"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":90.6666666666667,
+                 "x":66.3333333333333,
+                 "y":55
+                }, 
+                {
+                 "height":25.6666666666667,
+                 "id":12,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"souvenir"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":84.3333333333333,
+                 "x":69.6666666666667,
+                 "y":135.333333333333
+                }, 
+                {
+                 "height":27.6666666666667,
+                 "id":13,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"souvenir"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":84.3333333333334,
+                 "x":357.666666666667,
+                 "y":135.333333333333
+                }, 
+                {
+                 "height":24.6666666666667,
+                 "id":14,
                  "name":"",
                  "properties":[
                         {
@@ -264,9 +315,26 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":28,
-                 "x":127,
-                 "y":135
+                 "width":88.6666666666667,
+                 "x":66.6666666666667,
+                 "y":259.333333333333
+                }, 
+                {
+                 "height":25.3333333333334,
+                 "id":15,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"artifact"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":88.3333333333333,
+                 "x":355.333333333333,
+                 "y":259.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -317,7 +385,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":9,
+ "nextobjectid":16,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

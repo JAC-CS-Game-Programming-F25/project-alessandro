@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="17" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="18">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="17" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="19">
  <tileset firstgid="1" source="tilesets/museum-room-4-layer-1.tsj"/>
  <tileset firstgid="341" source="tilesets/museum-room-4-layer-2.tsj"/>
  <layer id="1" name="Floor" width="20" height="17">
@@ -113,7 +113,7 @@
    <properties>
     <property name="direction" value="down"/>
     <property name="guardType" value="patrol"/>
-    <property name="waypoints" value="2,4;2,9;8,9"/>
+    <property name="waypoints" value="2,4;2,9;8,9;2,9"/>
    </properties>
   </object>
   <object id="8" x="288" y="128" width="32.6667" height="32">

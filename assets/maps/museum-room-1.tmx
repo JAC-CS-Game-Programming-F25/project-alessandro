@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="16" height="33" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="13">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="16" height="33" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="28">
  <tileset firstgid="1" source="tilesets/museum-room-1-layer-1.tsj"/>
  <tileset firstgid="529" source="tilesets/room-builder.tsj"/>
  <tileset firstgid="9117" source="tilesets/museum-room-1-layer-2.tsj"/>
@@ -181,6 +181,71 @@
    </properties>
   </object>
   <object id="9" x="127.5" y="687" width="62.5" height="39">
+   <properties>
+    <property name="type" value="painting"/>
+   </properties>
+  </object>
+  <object id="14" x="117.333" y="44.3333" width="55" height="63">
+   <properties>
+    <property name="type" value="sculpture"/>
+   </properties>
+  </object>
+  <object id="15" x="229" y="40.3333" width="55" height="59.6667">
+   <properties>
+    <property name="type" value="artifact"/>
+   </properties>
+  </object>
+  <object id="16" x="343.667" y="44.3333" width="52.3333" height="61.3333">
+   <properties>
+    <property name="type" value="sculpture"/>
+   </properties>
+  </object>
+  <object id="17" x="166.333" y="148.667" width="49.3333" height="46.6667">
+   <properties>
+    <property name="type" value="artifact"/>
+   </properties>
+  </object>
+  <object id="18" x="169.667" y="287.333" width="42.6667" height="75">
+   <properties>
+    <property name="type" value="sculpture"/>
+   </properties>
+  </object>
+  <object id="19" x="299" y="287.667" width="41.6667" height="76">
+   <properties>
+    <property name="type" value="sculpture"/>
+   </properties>
+  </object>
+  <object id="21" x="130" y="502" width="59.3333" height="61.6667">
+   <properties>
+    <property name="type" value="painting"/>
+   </properties>
+  </object>
+  <object id="22" x="324.333" y="502" width="58.3333" height="62.3333">
+   <properties>
+    <property name="type" value="painting"/>
+   </properties>
+  </object>
+  <object id="23" x="128" y="591.667" width="62.3333" height="38">
+   <properties>
+    <property name="type" value="painting"/>
+   </properties>
+  </object>
+  <object id="24" x="319.667" y="591.667" width="62.6667" height="38.6667">
+   <properties>
+    <property name="type" value="painting"/>
+   </properties>
+  </object>
+  <object id="25" x="63.3333" y="688" width="63" height="37.6667">
+   <properties>
+    <property name="type" value="painting"/>
+   </properties>
+  </object>
+  <object id="26" x="319.667" y="687.667" width="62.6667" height="38.3333">
+   <properties>
+    <property name="type" value="painting"/>
+   </properties>
+  </object>
+  <object id="27" x="383.667" y="687.667" width="62.3333" height="38.3333">
    <properties>
     <property name="type" value="painting"/>
    </properties>

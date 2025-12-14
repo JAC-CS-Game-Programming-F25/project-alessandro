@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="17" height="21" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="15">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="17" height="21" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="19">
+ <editorsettings>
+  <export target="../../config/museum-room-3.json" format="json"/>
+ </editorsettings>
  <tileset firstgid="1" source="tilesets/museum-room-3-layer-1.tsj"/>
  <tileset firstgid="358" source="tilesets/museum-room-3-layer-2.tsj"/>
  <layer id="1" name="Floor" width="17" height="21">
@@ -156,6 +159,21 @@
    </properties>
   </object>
   <object id="13" x="63.3333" y="479.333" width="90.6667" height="48.6667">
+   <properties>
+    <property name="type" value="sculpture"/>
+   </properties>
+  </object>
+  <object id="15" x="72.6667" y="337.333" width="137.333" height="80">
+   <properties>
+    <property name="type" value="sculpture"/>
+   </properties>
+  </object>
+  <object id="16" x="394.667" y="264.667" width="72" height="31.3333">
+   <properties>
+    <property name="type" value="sculpture"/>
+   </properties>
+  </object>
+  <object id="18" x="206.667" y="36" width="138.667" height="98.6667">
    <properties>
     <property name="type" value="sculpture"/>
    </properties>

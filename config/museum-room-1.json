@@ -167,7 +167,7 @@
                  "y":735
                 }, 
                 {
-                 "height":64.3333333333334,
+                 "height":64.3333,
                  "id":12,
                  "name":"",
                  "properties":[
@@ -189,9 +189,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":31.6666666666667,
-                 "x":0.333333333333333,
-                 "y":735.333333333333
+                 "width":31.6667,
+                 "x":0.333333,
+                 "y":735.333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -402,6 +402,228 @@
                  "width":62.5,
                  "x":127.5,
                  "y":687
+                }, 
+                {
+                 "height":63,
+                 "id":14,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"sculpture"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":55,
+                 "x":117.333333333333,
+                 "y":44.3333333333333
+                }, 
+                {
+                 "height":59.6666666666667,
+                 "id":15,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"artifact"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":55,
+                 "x":229,
+                 "y":40.3333333333333
+                }, 
+                {
+                 "height":61.3333333333333,
+                 "id":16,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"sculpture"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":52.3333333333334,
+                 "x":343.666666666667,
+                 "y":44.3333333333333
+                }, 
+                {
+                 "height":46.6666666666667,
+                 "id":17,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"artifact"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":49.3333333333333,
+                 "x":166.333333333333,
+                 "y":148.666666666667
+                }, 
+                {
+                 "height":75,
+                 "id":18,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"sculpture"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":42.6666666666667,
+                 "x":169.666666666667,
+                 "y":287.333333333333
+                }, 
+                {
+                 "height":76,
+                 "id":19,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"sculpture"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":41.6666666666666,
+                 "x":299,
+                 "y":287.666666666667
+                }, 
+                {
+                 "height":61.6666666666666,
+                 "id":21,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"painting"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":59.3333333333333,
+                 "x":130,
+                 "y":502
+                }, 
+                {
+                 "height":62.3333333333333,
+                 "id":22,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"painting"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":58.3333333333333,
+                 "x":324.333333333333,
+                 "y":502
+                }, 
+                {
+                 "height":38,
+                 "id":23,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"painting"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":62.3333333333333,
+                 "x":128,
+                 "y":591.666666666667
+                }, 
+                {
+                 "height":38.6666666666666,
+                 "id":24,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"painting"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":62.6666666666667,
+                 "x":319.666666666667,
+                 "y":591.666666666667
+                }, 
+                {
+                 "height":37.6666666666666,
+                 "id":25,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"painting"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":63,
+                 "x":63.3333333333333,
+                 "y":688
+                },
+            
+                {
+                 "height":38.3333333333334,
+                 "id":26,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"painting"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":62.6666666666667,
+                 "x":319.666666666667,
+                 "y":687.666666666667
+                }, 
+                {
+                 "height":38.3333333333334,
+                 "id":27,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"painting"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":62.3333333333334,
+                 "x":383.666666666667,
+                 "y":687.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -498,7 +720,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":13,
+ "nextobjectid":28,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

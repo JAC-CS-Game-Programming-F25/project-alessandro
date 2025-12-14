@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="16" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="9">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="16" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="16">
+ <editorsettings>
+  <export target="../../config/museum-room-2.json" format="json"/>
+ </editorsettings>
  <tileset firstgid="1" source="tilesets/museum-room-2-layer-1.tsj"/>
  <tileset firstgid="161" source="tilesets/museum-room-2-layer-2.tsj"/>
  <layer id="1" name="Floor" width="16" height="10">
@@ -54,8 +57,8 @@
   </object>
   <object id="8" x="0.25" y="224" width="31.5" height="64.25">
    <properties>
-    <property name="spawnX" value="15"/>
-    <property name="spawnY" value="17"/>
+    <property name="spawnX" value="14"/>
+    <property name="spawnY" value="18"/>
     <property name="targetRoom" value="museum-room-3"/>
    </properties>
   </object>
@@ -77,22 +80,42 @@
   </object>
  </objectgroup>
  <objectgroup id="6" name="Collectible-Items">
-  <object id="4" x="159.5" y="63.5" width="44" height="33.5">
-   <properties>
-    <property name="type" value="souvenir"/>
-   </properties>
-  </object>
   <object id="5" x="352" y="48" width="93" height="50">
    <properties>
     <property name="type" value="souvenir"/>
    </properties>
   </object>
-  <object id="6" x="96" y="256" width="32.5" height="33">
+  <object id="9" x="257.667" y="19" width="93.6667" height="77">
+   <properties>
+    <property name="type" value="souvenir"/>
+   </properties>
+  </object>
+  <object id="10" x="160" y="56.3333" width="92.6667" height="51.6667">
+   <properties>
+    <property name="type" value="souvenir"/>
+   </properties>
+  </object>
+  <object id="11" x="66.3333" y="55" width="90.6667" height="54.3333">
+   <properties>
+    <property name="type" value="souvenir"/>
+   </properties>
+  </object>
+  <object id="12" x="69.6667" y="135.333" width="84.3333" height="25.6667">
+   <properties>
+    <property name="type" value="souvenir"/>
+   </properties>
+  </object>
+  <object id="13" x="357.667" y="135.333" width="84.3333" height="27.6667">
+   <properties>
+    <property name="type" value="souvenir"/>
+   </properties>
+  </object>
+  <object id="14" x="66.6667" y="259.333" width="88.6667" height="24.6667">
    <properties>
     <property name="type" value="artifact"/>
    </properties>
   </object>
-  <object id="7" x="127" y="135" width="28" height="26">
+  <object id="15" x="355.333" y="259.667" width="88.3333" height="25.3333">
    <properties>
     <property name="type" value="artifact"/>
    </properties>
