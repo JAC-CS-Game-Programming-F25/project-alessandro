@@ -4,6 +4,7 @@ import Room from "./Room.js";
 import TilesetManager from "./TilesetManager.js";
 import { setCanvasSize } from "../globals.js";
 import Tile from "./Tile.js";
+import MessageDisplay from "../objects/MessageDisplay.js";
 
 export default class Level {
     static QUOTA = 10000;
@@ -25,6 +26,8 @@ export default class Level {
 
         // Track collected items by unique ID (room_name:item_index)
         this.collectedItems = new Set();
+
+        this.messageDisplay = new MessageDisplay();
     }
 
     async loadRoom(roomName, jsonPath) {
@@ -153,6 +156,7 @@ export default class Level {
     update(dt) {
         this.player.update(dt);
         this.currentRoom.update(dt, this.player, this);
+        this.messageDisplay.update(dt); // ADD THIS
 
         // Update transition cooldown
         if (this.transitionCooldown > 0) {
@@ -218,6 +222,9 @@ export default class Level {
 
         // 6. Render interaction prompt LAST (so it's always on top)
         this.currentRoom.interactableManager.renderPrompt();
+
+        // Render messages on top of everything
+        this.messageDisplay.render();
     }
 
     /**
@@ -234,7 +241,25 @@ export default class Level {
     }
 
     onPlayerExit() {
-        if (this.moneyCollected >= this.quota) {
+        const amountNeeded = this.quota - this.moneyCollected;
+
+        if (amountNeeded > 0) {
+            // Not enough money - show warning and teleport back
+            this.messageDisplay.showMessage(
+                `Need $${amountNeeded} more to escape!`,
+                3,
+                "#f44336"
+            );
+
+            // Teleport player back to spawn point
+            this.player.position.x = 14;
+            this.player.position.y = 16;
+            this.player.canvasPosition.x = 14 * Tile.SIZE;
+            this.player.canvasPosition.y = 16 * Tile.SIZE;
+
+            console.log("Player tried to exit without enough money!");
+        } else {
+            // Has enough money - allow exit
             this.playerReachedExit = true;
         }
     }
