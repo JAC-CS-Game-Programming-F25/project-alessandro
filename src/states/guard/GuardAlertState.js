@@ -12,21 +12,10 @@ export default class GuardAlertState extends State {
     }
 
     enter() {
-        console.log("CAUGHT! Guard detected player!");
-
-        // Trigger game over
-        // We'll implement this properly later with game states
-        if (this.guard.level) {
-            this.onPlayerCaught();
+        if (this.guard.level && this.guard.level.onPlayerCaught) {
+            this.guard.level.onPlayerCaught();
         }
     }
 
-    onPlayerCaught() {
-        // For now, just log it
-        // Later we'll transition to GameOverState
-        console.log("Player was caught by guard!");
-
-        // You could add a delay here or freeze the game
-        // For now we'll just log it so you can test
-    }
+    onPlayerCaught() {}
 }

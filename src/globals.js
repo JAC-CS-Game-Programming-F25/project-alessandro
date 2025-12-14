@@ -13,6 +13,9 @@ export const context =
 export let CANVAS_WIDTH = 512;
 export let CANVAS_HEIGHT = 704;
 
+export const MENU_CANVAS_WIDTH = 800;
+export const MENU_CANVAS_HEIGHT = 600;
+
 export function setCanvasSize(width, height) {
     CANVAS_WIDTH = width;
     CANVAS_HEIGHT = height;

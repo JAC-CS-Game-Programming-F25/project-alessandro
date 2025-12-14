@@ -117,15 +117,8 @@ export default class Room {
     }
 
     update(dt, player, level) {
-        if (!player || !level) {
-            console.error("Room.update: Missing player or level!");
-            return;
-        }
-
-        // Update interactable manager
         this.interactableManager.update(player.position);
 
-        // Update guards
         if (this.guards && this.guards.length > 0) {
             this.guards.forEach((guard) => {
                 guard.level = level;

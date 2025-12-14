@@ -2,7 +2,6 @@ import GameStateName from "./enums/GameStateName.js";
 import Game from "../lib/Game.js";
 import {
     canvas,
-    setCanvasSize,
     context,
     fonts,
     images,
@@ -14,11 +13,10 @@ import PlayState from "./states/game/PlayState.js";
 import GameOverState from "./states/game/GameOverState.js";
 import VictoryState from "./states/game/VictoryState.js";
 import TitleScreenState from "./states/game/TitleScreenState.js";
+import InstructionsState from "./states/game/InstructionsState.js";
+import TransitionState from "./states/game/TransitionState.js";
 
-// Set the dimensions of the play area.
-setCanvasSize(512, 704);
 canvas.setAttribute("tabindex", "1");
-
 document.body.appendChild(canvas);
 
 // Fetch the asset definitions from assets.json.
@@ -35,11 +33,14 @@ sounds.load(soundDefinitions);
 
 // Add all the states to the state machine.
 stateMachine.add(GameStateName.TitleScreen, new TitleScreenState());
+stateMachine.add(GameStateName.Instructions, new InstructionsState());
 stateMachine.add(GameStateName.GameOver, new GameOverState());
 stateMachine.add(GameStateName.Victory, new VictoryState());
-stateMachine.add(GameStateName.Play, new PlayState()); // No parameter needed now
+stateMachine.add(GameStateName.Play, new PlayState());
+stateMachine.add(GameStateName.Transition, new TransitionState()); // Add transition state
 
-stateMachine.change(GameStateName.Play);
+// Start at title screen
+stateMachine.change(GameStateName.TitleScreen);
 
 const game = new Game(
     stateMachine,

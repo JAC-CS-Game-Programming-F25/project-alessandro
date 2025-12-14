@@ -36,11 +36,6 @@ export default class TilesetManager {
      * @returns {array} Array of sprites indexed by global tile ID
      */
     loadSpritesForRoom(roomDefinition) {
-        if (!roomDefinition.tilesets || roomDefinition.tilesets.length === 0) {
-            console.warn("No tilesets found in room definition");
-            return {};
-        }
-
         const allSprites = {};
 
         roomDefinition.tilesets.forEach((tilesetRef) => {
@@ -53,10 +48,6 @@ export default class TilesetManager {
             });
         });
 
-        console.log(
-            "Loaded sprites for tile IDs:",
-            Object.keys(allSprites).length
-        );
         return allSprites;
     }
 
@@ -67,32 +58,9 @@ export default class TilesetManager {
      */
     loadTilesetSprites(tilesetRef) {
         const tilesetFileName = this.extractFileName(tilesetRef.source);
-        console.log("Loading tileset:", tilesetFileName);
-
         const imageName = this.tilesetMapping[tilesetFileName];
 
-        if (!imageName) {
-            console.error(
-                `No image mapping found for tileset: ${tilesetFileName}`
-            );
-            console.log(
-                "Available mappings:",
-                Object.keys(this.tilesetMapping)
-            );
-            return [];
-        }
-
-        console.log("Mapped to image name:", imageName);
-
         const image = images.get(imageName);
-
-        if (!image) {
-            console.error(`Image not loaded: ${imageName}`);
-            console.log("Available images:", images); // Check what's loaded
-            return [];
-        }
-
-        console.log("Generating sprites from image:", imageName);
 
         return Sprite.generateSpritesFromSpriteSheet(
             image,

@@ -6,17 +6,21 @@ import { setCanvasSize } from "../globals.js";
 import Tile from "./Tile.js";
 
 export default class Level {
+    static QUOTA = 10000;
+
     constructor() {
         this.rooms = new Map();
         this.currentRoom = null;
         this.player = null;
         this.moneyCollected = 0;
-        this.quota = 10000;
+        this.quota = Level.QUOTA;
         this.tilesetManager = new TilesetManager();
 
-        // Transition cooldown to prevent infinite loops
         this.transitionCooldown = 0;
-        this.transitionCooldownTime = 0.5; // Half second cooldown
+        this.transitionCooldownTime = 0.5;
+
+        this.playerReachedExit = false;
+        this.onPlayerCaught = null;
     }
 
     async loadRoom(roomName, jsonPath) {
@@ -34,12 +38,6 @@ export default class Level {
     setCurrentRoom(roomName, playerSpawnPosition = null) {
         this.currentRoom = this.rooms.get(roomName);
 
-        if (!this.currentRoom) {
-            console.error(`Room ${roomName} not loaded!`);
-            return;
-        }
-
-        // Resize canvas to match room dimensions
         setCanvasSize(
             this.currentRoom.pixelWidth,
             this.currentRoom.pixelHeight
@@ -57,10 +55,6 @@ export default class Level {
             this.player.canvasPosition.x = playerSpawnPosition.x * Tile.SIZE;
             this.player.canvasPosition.y = playerSpawnPosition.y * Tile.SIZE;
         }
-
-        console.log(
-            `Switched to room: ${roomName} (${this.currentRoom.pixelWidth}x${this.currentRoom.pixelHeight})`
-        );
     }
 
     get collisionLayer() {
@@ -68,11 +62,6 @@ export default class Level {
     }
 
     update(dt) {
-        if (!this.currentRoom || !this.player) {
-            console.log("Level.update: No room or player");
-            return;
-        }
-
         this.player.update(dt);
         this.currentRoom.update(dt, this.player, this);
 
@@ -83,22 +72,12 @@ export default class Level {
 
         // Check for room transitions (only if cooldown expired)
         if (this.transitionCooldown <= 0) {
-            if (!this.currentRoom.roomTransition) {
-                console.error("Current room has no roomTransition!");
-                return;
-            }
             const activeTransition =
                 this.currentRoom.roomTransition.checkTransitions(
                     this.player.position
                 );
 
             if (activeTransition) {
-                console.log(
-                    "TRANSITION TRIGGERED:",
-                    activeTransition.targetRoom,
-                    "from position:",
-                    this.player.position
-                );
                 this.transitionToRoom(
                     activeTransition.targetRoom,
                     activeTransition.spawnPosition
@@ -109,9 +88,6 @@ export default class Level {
 
         this.currentRoom.onItemCollected = (item) => {
             this.moneyCollected += item.value;
-            console.log(
-                `Collected ${item.type} worth $${item.value}. Total: $${this.moneyCollected}`
-            );
         };
     }
 
@@ -169,32 +145,12 @@ export default class Level {
             return;
         }
 
-        // Check if room is already loaded
-        if (!this.rooms.has(roomName)) {
-            console.error(
-                `Cannot transition to ${roomName} - room not loaded!`
-            );
-            return;
-        }
-
         this.setCurrentRoom(roomName, spawnPosition);
     }
 
     onPlayerExit() {
-        console.log("Player reached the exit!");
-
-        // Check if quota is met
         if (this.moneyCollected >= this.quota) {
-            console.log("🎉 VICTORY! You collected enough money!");
-            console.log(`Final haul: $${this.moneyCollected} / $${this.quota}`);
-            // TODO: Transition to VictoryState
-        } else {
-            const remaining = this.quota - this.moneyCollected;
-            console.log(
-                `❌ Not enough money! You need $${remaining} more to escape!`
-            );
-            console.log(`Current: $${this.moneyCollected} / $${this.quota}`);
-            // Player can go back and collect more
+            this.playerReachedExit = true;
         }
     }
 }

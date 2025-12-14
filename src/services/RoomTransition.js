@@ -28,8 +28,6 @@ export default class RoomTransition {
                 this.transitions.push(transition);
             }
         });
-
-        console.log(`Loaded ${this.transitions.length} room transitions`);
     }
 
     /**
@@ -41,14 +39,6 @@ export default class RoomTransition {
         const targetRoom = this.getPropertyValue(properties, "targetRoom");
         const spawnX = this.getPropertyValue(properties, "spawnX");
         const spawnY = this.getPropertyValue(properties, "spawnY");
-
-        if (!targetRoom) {
-            console.warn(
-                "Transition missing targetRoom property:",
-                tiledObject
-            );
-            return null;
-        }
 
         // Special case: exit doesn't need spawn coordinates
         if (targetRoom === "exit") {
@@ -65,15 +55,6 @@ export default class RoomTransition {
                 targetRoom: "exit",
                 spawnPosition: null, // No spawn needed for exit
             };
-        }
-
-        // For normal room transitions, spawnX and spawnY are required
-        if (spawnX === null || spawnY === null) {
-            console.warn(
-                "Transition missing spawnX/spawnY properties:",
-                tiledObject
-            );
-            return null;
         }
 
         // Convert pixel coordinates to grid
