@@ -4,7 +4,7 @@ import Input from "../../../lib/Input.js";
 import { input } from "../../globals.js";
 
 export default class PlayerCrouchingState extends PlayerMovingState {
-    static CROUCH_ANIMATION_TIME = 0.50;
+    static CROUCH_ANIMATION_TIME = 0.5;
     static CROUCH_SPEED_MULTIPLIER = 0.5;
 
     constructor(player) {
@@ -16,10 +16,6 @@ export default class PlayerCrouchingState extends PlayerMovingState {
     enter() {
         super.enter();
         this.player.isCrouching = true;
-    }
-
-    exit() {
-        this.player.isCrouching = false;
     }
 
     /**

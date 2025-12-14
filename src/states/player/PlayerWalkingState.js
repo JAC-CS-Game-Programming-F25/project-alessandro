@@ -10,6 +10,11 @@ export default class PlayerWalkingState extends PlayerMovingState {
         super(player, player.speed, PlayerWalkingState.WALK_ANIMATION_TIME);
     }
 
+    enter() {
+        super.enter();
+        this.player.isCrouching = false;
+    }
+
     /**
      * Check if we should transition to a different state
      */

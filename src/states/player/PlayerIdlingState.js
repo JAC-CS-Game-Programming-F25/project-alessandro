@@ -36,7 +36,7 @@ export default class PlayerIdlingState extends State {
     enter() {
         this.player.sprites = this.player.idleSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
-        this.justEntered = true;
+        this.player.isCrouching = false; // ADD THIS LINE
     }
 
     update() {
