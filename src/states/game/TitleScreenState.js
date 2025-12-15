@@ -7,9 +7,11 @@ import {
     MENU_CANVAS_WIDTH,
     MENU_CANVAS_HEIGHT,
     stateMachine,
+    sounds,
 } from "../../globals.js";
 import Input from "../../../lib/Input.js";
 import SaveManager from "../../services/SaveManager.js";
+import SoundName from "../../enums/SoundName.js";
 
 export default class TitleScreenState extends State {
     constructor() {
@@ -21,6 +23,7 @@ export default class TitleScreenState extends State {
 
     enter() {
         setCanvasSize(MENU_CANVAS_WIDTH, MENU_CANVAS_HEIGHT);
+        sounds.play(SoundName.MainMenu);
 
         const hasSave = SaveManager.hasSaveData();
         this.saveInfo = null;
@@ -54,6 +57,7 @@ export default class TitleScreenState extends State {
             input.isKeyPressed(Input.KEYS.ARROW_DOWN) ||
             input.isKeyPressed(Input.KEYS.S)
         ) {
+            sounds.play(SoundName.Navigate);
             this.selectedOption =
                 (this.selectedOption + 1) % this.menuOptions.length;
         }
@@ -62,12 +66,14 @@ export default class TitleScreenState extends State {
             input.isKeyPressed(Input.KEYS.ARROW_UP) ||
             input.isKeyPressed(Input.KEYS.W)
         ) {
+            sounds.play(SoundName.Navigate);
             this.selectedOption =
                 (this.selectedOption - 1 + this.menuOptions.length) %
                 this.menuOptions.length;
         }
 
         if (input.isKeyPressed(Input.KEYS.ENTER)) {
+            sounds.play(SoundName.Select);
             this.selectOption();
         }
 
@@ -79,6 +85,10 @@ export default class TitleScreenState extends State {
                 this.enter();
             }
         }
+    }
+
+    exit() {
+        sounds.stop(SoundName.MainMenu);
     }
 
     selectOption() {

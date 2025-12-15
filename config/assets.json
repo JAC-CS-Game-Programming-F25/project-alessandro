@@ -113,5 +113,97 @@
             "path": "./assets/fonts/RobotoMono.ttf"
         }
     ],
-    "sounds": []
+    "sounds": [
+        {
+            "name": "alert",
+            "path": "./assets/sounds/alert.wav",
+            "size": 2,
+            "volume": 0.6,
+            "loop": false
+        },
+        {
+            "name": "clock-tick",
+            "path": "./assets/sounds/clock-tick.wav",
+            "size": 1,
+            "volume": 0.4,
+            "loop": true
+        },
+        {
+            "name": "exit-open",
+            "path": "./assets/sounds/exit-open.wav",
+            "size": 1,
+            "volume": 0.5,
+            "loop": false
+        },
+        {
+            "name": "footsteps",
+            "path": "./assets/sounds/footsteps.wav",
+            "size": 5,
+            "volume": 0.1,
+            "loop": false
+        },
+        {
+            "name": "game-over",
+            "path": "./assets/sounds/game-over.wav",
+            "size": 1,
+            "volume": 0.2,
+            "loop": false
+        },
+        {
+            "name": "in-game",
+            "path": "./assets/sounds/in-game.mp3",
+            "size": 1,
+            "volume": 0.1,
+            "loop": true
+        },
+        {
+            "name": "main-menu",
+            "path": "./assets/sounds/main-menu.mp3",
+            "size": 1,
+            "volume": 0.15,
+            "loop": true
+        },
+        {
+            "name": "money-pickup",
+            "path": "./assets/sounds/money-pickup.wav",
+            "size": 3,
+            "volume": 0.5,
+            "loop": false
+        },
+        {
+            "name": "navigate",
+            "path": "./assets/sounds/navigate.wav",
+            "size": 10,
+            "volume": 0.3,
+            "loop": false
+        },
+        {
+            "name": "pause",
+            "path": "./assets/sounds/pause.wav",
+            "size": 1,
+            "volume": 0.4,
+            "loop": false
+        },
+        {
+            "name": "select",
+            "path": "./assets/sounds/select.wav",
+            "size": 1,
+            "volume": 0.4,
+            "loop": false
+        },
+        {
+            "name": "victory",
+            "path": "./assets/sounds/victory.wav",
+            "size": 1,
+            "volume": 0.6,
+            "loop": false
+        },
+        {
+            "name": "whoosh",
+            "path": "./assets/sounds/whoosh.wav",
+            "size": 1,
+            "volume": 0.4,
+            "loop": false
+        }
+    ]
 }

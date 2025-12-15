@@ -1,4 +1,5 @@
-import { context } from "../globals.js";
+import SoundName from "../enums/SoundName.js";
+import { context, sounds } from "../globals.js";
 import Tile from "../services/Tile.js";
 
 /**
@@ -19,18 +20,6 @@ export default class ExitPortal {
 
     unlock() {
         this.isUnlocked = true;
-
-        // Show message that exit is unlocked
-        if (this.level && this.level.messageDisplay) {
-            this.level.messageDisplay.showMessage(
-                "Exit is now open!",
-                4,
-                "#4CAF50" // Green color for success
-            );
-        }
-
-        // TODO: Play exit unlock sound here
-        // sounds.play('exit-unlock');
 
         // Create unlock particle burst
         for (let i = 0; i < 30; i++) {

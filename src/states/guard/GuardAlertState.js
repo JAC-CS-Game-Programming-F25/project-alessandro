@@ -1,5 +1,7 @@
 import State from "../../../lib/State.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
+import SoundName from "../../enums/SoundName.js";
+import { sounds } from "../../globals.js";
 
 export default class GuardAlertState extends State {
     /**
@@ -13,6 +15,7 @@ export default class GuardAlertState extends State {
     }
 
     enter() {
+        sounds.play(SoundName.Alert);
         // Play caught animation on player
         if (this.guard.level?.player) {
             this.guard.level.player.changeState(PlayerStateName.Caught);
@@ -22,7 +25,7 @@ export default class GuardAlertState extends State {
         if (this.guard.level?.onPlayerCaught) {
             setTimeout(() => {
                 this.guard.level.onPlayerCaught();
-            }, 500);
+            }, 2000);
         }
     }
 

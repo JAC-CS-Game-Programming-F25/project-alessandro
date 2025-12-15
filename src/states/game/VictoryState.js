@@ -7,9 +7,11 @@ import {
     MENU_CANVAS_WIDTH,
     MENU_CANVAS_HEIGHT,
     stateMachine,
+    sounds,
 } from "../../globals.js";
 import Input from "../../../lib/Input.js";
 import SaveManager from "../../services/SaveManager.js";
+import SoundName from "../../enums/SoundName.js";
 
 export default class VictoryState extends State {
     constructor() {
@@ -20,6 +22,7 @@ export default class VictoryState extends State {
 
     enter(params = {}) {
         setCanvasSize(MENU_CANVAS_WIDTH, MENU_CANVAS_HEIGHT);
+        sounds.play(SoundName.Victory);
         this.totalMoney = params.totalMoney || 0;
         this.totalTime = params.totalTime || 0;
 

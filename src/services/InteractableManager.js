@@ -1,7 +1,8 @@
 import Tile from "./Tile.js";
 import ItemType from "../enums/ItemType.js";
-import { context } from "../globals.js";
+import { context, sounds } from "../globals.js";
 import ItemValue from "../enums/ItemValue.js";
+import SoundName from "../enums/SoundName.js";
 
 /**
  * Manages interactable items in a room
@@ -13,7 +14,7 @@ export default class InteractableManager {
         this.room = room;
         this.interactables = [];
         this.currentInteractable = null;
-        this.interactionRange = 2.25;
+        this.interactionRange = 2.5;
 
         try {
             this.interactables = this.findInteractables();

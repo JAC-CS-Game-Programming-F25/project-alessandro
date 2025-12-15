@@ -2,12 +2,13 @@ import Player from "../entities/Player.js";
 import Vector from "../../lib/Vector.js";
 import Room from "./Room.js";
 import TilesetManager from "./TilesetManager.js";
-import { timer, setCanvasSize, QUOTA } from "../globals.js";
+import { timer, setCanvasSize, QUOTA, sounds } from "../globals.js";
 import Tile from "./Tile.js";
 import MessageDisplay from "../objects/MessageDisplay.js";
 import ParticleSystem from "./ParticleSystem.js";
 import ExitPortal from "../objects/ExitPortal.js";
 import Easing from "../../lib/Easing.js";
+import SoundName from "../enums/SoundName.js";
 
 export default class Level {
     constructor() {
@@ -19,6 +20,7 @@ export default class Level {
         this.displayedMoney = 0;
         this.quota = QUOTA;
         this.tilesetManager = new TilesetManager();
+        this.exitUnlocked = false;
 
         this.transitionCooldown = 0;
         this.transitionCooldownTime = 0.5;
@@ -131,6 +133,7 @@ export default class Level {
         }
 
         this.currentRoom.onItemCollected = (item) => {
+            sounds.play(SoundName.MoneyPickup);
             const interactables =
                 this.currentRoom.interactableManager.interactables;
             const itemData = interactables[item.index];
@@ -140,6 +143,16 @@ export default class Level {
             this.particleSystem.burst(itemX, itemY, "#FFD700", 20);
 
             this.moneyCollected += item.value;
+
+            if (!this.exitUnlocked && this.moneyCollected >= this.quota) {
+                this.exitUnlocked = true;
+                this.messageDisplay.showMessage(
+                    "Exit is now open!",
+                    4,
+                    "#4CAF50"
+                );
+                sounds.play(SoundName.ExitOpen);
+            }
 
             // Tween the moneyTweenObject
             timer.tween(
@@ -262,6 +275,7 @@ export default class Level {
      * Transition to a new room
      */
     transitionToRoom(roomName, spawnPosition) {
+        sounds.play(SoundName.Whoosh);
         // Handle special room names
         if (roomName === "exit") {
             this.onPlayerExit();

@@ -11,9 +11,11 @@ import {
     canvas,
     stateMachine,
     TIME_TO_COMPLETE,
+    sounds,
 } from "../../globals.js";
 import Input from "../../../lib/Input.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
+import SoundName from "../../enums/SoundName.js";
 
 export default class PlayState extends State {
     constructor() {
@@ -24,6 +26,7 @@ export default class PlayState extends State {
         this.isPaused = false;
         this.timeRemaining = TIME_TO_COMPLETE; // 10 minutes in seconds
         this.timePlayed = 0;
+        this.isWarningPlaying = false;
 
         // Auto-save configuration
         this.autoSaveInterval = 2;
@@ -94,6 +97,16 @@ export default class PlayState extends State {
 
         // Set the caught handler
         this.level.onPlayerCaught = () => {
+            if (this.gameEnded) {
+                return;
+            }
+
+            sounds.stop(SoundName.InGame);
+            if (this.isWarningPlaying) {
+                sounds.stop(SoundName.ClockTick);
+                this.isWarningPlaying = false;
+            }
+
             this.onGameOver("caught");
         };
 
@@ -102,6 +115,7 @@ export default class PlayState extends State {
 
         this.isLoaded = true;
         this.timeSinceLastSave = 0;
+        sounds.play(SoundName.InGame);
     }
 
     /**
@@ -128,17 +142,27 @@ export default class PlayState extends State {
     }
 
     update(dt) {
-        if (!this.isLoaded) {
-            return;
-        }
-
-        if (this.gameEnded) {
+        if (!this.isLoaded || this.gameEnded) {
             return;
         }
 
         // Handle pause toggle
         if (input.isKeyPressed(Input.KEYS.ESCAPE)) {
             this.isPaused = !this.isPaused;
+            sounds.play(SoundName.Pause);
+
+            // Pause/unpause gameplay sounds
+            if (this.isPaused) {
+                sounds.pause(SoundName.InGame);
+                if (this.isWarningPlaying) {
+                    sounds.pause(SoundName.ClockTick);
+                }
+            } else {
+                sounds.play(SoundName.InGame); // Resume music
+                if (this.isWarningPlaying) {
+                    sounds.play(SoundName.ClockTick); // Resume ticking
+                }
+            }
         }
 
         // Handle pause menu actions
@@ -158,6 +182,14 @@ export default class PlayState extends State {
         this.timePlayed += dt;
         this.level.timeRemaining = this.timeRemaining;
 
+        if (this.timeRemaining < 60 && !this.isWarningPlaying) {
+            sounds.play(SoundName.ClockTick);
+            this.isWarningPlaying = true;
+        } else if (this.timeRemaining >= 60 && this.isWarningPlaying) {
+            sounds.stop(SoundName.ClockTick);
+            this.isWarningPlaying = false;
+        }
+
         // Auto-save logic
         this.timeSinceLastSave += dt;
         if (this.timeSinceLastSave >= this.autoSaveInterval) {
@@ -167,7 +199,11 @@ export default class PlayState extends State {
 
         // Check for time out
         if (this.timeRemaining <= 0) {
-            this.gameEnded = true;
+            if (this.isWarningPlaying) {
+                sounds.stop(SoundName.ClockTick);
+                this.isWarningPlaying = false;
+            }
+
             this.onGameOver("timeout");
             return;
         }
@@ -176,7 +212,6 @@ export default class PlayState extends State {
 
         // Check for victory
         if (this.level.playerReachedExit) {
-            this.gameEnded = true;
             this.onVictory();
         }
     }
@@ -214,6 +249,12 @@ export default class PlayState extends State {
     }
 
     exit() {
+        sounds.stop(SoundName.InGame);
+        if (this.isWarningPlaying) {
+            sounds.stop(SoundName.ClockTick);
+            this.isWarningPlaying = false;
+        }
+
         // Save one last time when exiting play state
         if (this.isLoaded) {
             this.autoSave();
@@ -358,9 +399,34 @@ export default class PlayState extends State {
     }
 
     onGameOver(reason) {
-        // Delete save on game over
+        console.log(
+            "[PlayState] onGameOver called with reason:",
+            reason,
+            "gameEnded:",
+            this.gameEnded
+        );
+
+        if (this.gameEnded) {
+            console.log(
+                "[PlayState] onGameOver - gameEnded already true, returning early"
+            );
+            return;
+        }
+
+        console.log("[PlayState] onGameOver - setting gameEnded = true");
+        this.gameEnded = true;
+
+        console.log("[PlayState] onGameOver - stopping sounds");
+        sounds.stop(SoundName.InGame);
+        if (this.isWarningPlaying) {
+            sounds.stop(SoundName.ClockTick);
+            this.isWarningPlaying = false;
+        }
+
+        console.log("[PlayState] onGameOver - deleting save");
         SaveManager.deleteSave();
 
+        console.log("[PlayState] onGameOver - changing to transition state");
         stateMachine.change(GameStateName.Transition, {
             fromState: this,
             toState: stateMachine.states[GameStateName.GameOver],
@@ -371,9 +437,15 @@ export default class PlayState extends State {
                 timeLeft: this.timeRemaining,
             },
         });
+        console.log("[PlayState] onGameOver - stateMachine.change completed");
     }
 
     onVictory() {
+        if (this.isWarningPlaying) {
+            sounds.stop(SoundName.ClockTick);
+            this.isWarningPlaying = false;
+        }
+
         // Delete save on victory
         SaveManager.deleteSave();
 

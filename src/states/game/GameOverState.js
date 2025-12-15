@@ -7,9 +7,11 @@ import {
     MENU_CANVAS_WIDTH,
     MENU_CANVAS_HEIGHT,
     stateMachine,
+    sounds,
 } from "../../globals.js";
 import Input from "../../../lib/Input.js";
 import SaveManager from "../../services/SaveManager.js";
+import SoundName from "../../enums/SoundName.js";
 
 export default class GameOverState extends State {
     constructor() {
@@ -22,6 +24,7 @@ export default class GameOverState extends State {
 
     enter(params = {}) {
         setCanvasSize(MENU_CANVAS_WIDTH, MENU_CANVAS_HEIGHT);
+        sounds.play(SoundName.GameOver);
         this.reason = params.reason || "caught";
         this.moneyCollected = params.moneyCollected || 0;
         this.quota = params.quota || 10000;

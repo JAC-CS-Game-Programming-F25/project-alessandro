@@ -2,10 +2,11 @@ import Animation from "../../../lib/Animation.js";
 import State from "../../../lib/State.js";
 import Direction from "../../enums/Direction.js";
 import Input from "../../../lib/Input.js";
-import { input } from "../../globals.js";
+import { sounds, input } from "../../globals.js";
 import Tile from "../../services/Tile.js";
 import GameEntity from "../../entities/GameEntity.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
+import SoundName from "../../enums/SoundName.js";
 
 export default class PlayerMovingState extends State {
     constructor(player, speed, animationTime) {
@@ -26,6 +27,9 @@ export default class PlayerMovingState extends State {
             ),
             [Direction.Right]: new Animation([0, 1, 2, 3, 4, 5], animationTime),
         };
+
+        this.footstepTimer = 0;
+        this.footstepInterval = 0.3;
     }
 
     get collisionLayer() {
@@ -38,6 +42,12 @@ export default class PlayerMovingState extends State {
     }
 
     update(dt) {
+        this.footstepTimer += dt;
+        if (this.footstepTimer >= this.footstepInterval) {
+            sounds.play(SoundName.Footsteps);
+            this.footstepTimer = 0;
+        }
+
         this.player.currentAnimation = this.animation[this.player.direction];
 
         if (input.isKeyPressed(Input.KEYS.E)) {
