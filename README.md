@@ -56,7 +56,7 @@ Idle ↔ Walking ↔ Crouching (based on input)
 
 ## 🗺️ Class Diagram
 
-![Class Diagram](./assets/images/ClassDiagram.png)
+![Class Diagram](./assets/images/diagrams/ClassDiagram.png)
 
 **Key Relationships**:
 
@@ -71,12 +71,12 @@ Idle ↔ Walking ↔ Crouching (based on input)
 
 ### Screens
 
-![Title Screen](./assets/images/TitleScreen.png)  
-![Instructions Screen](./assets/images/InstructionsScreen.png)  
-![Gameplay Screen](./assets/images/GameplayScreen.png)  
-![Pause Screen](./assets/images/PauseScreen.png)  
-![Victory Screen](./assets/images/VictoryScreen.png)  
-![Game Over Screen](./assets/images/GameOverScreen.png)
+![Title Screen](./assets/images/diagrams/TitleScreen.png)  
+![Instructions Screen](./assets/images/diagrams/InstructionsScreen.png)  
+![Gameplay Screen](./assets/images/diagrams/GameplayScreen.png)  
+![Pause Screen](./assets/images/diagrams/PauseScreen.png)  
+![Victory Screen](./assets/images/diagrams/VictoryScreen.png)  
+![Game Over Screen](./assets/images/diagrams/GameOverScreen.png)
 
 Gameplay shows top-down museum view with HUD bar (money/quota, timer, pause hint), player sprite, guards with vision cones, and collectible items.
 
