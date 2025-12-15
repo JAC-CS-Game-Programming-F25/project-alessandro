@@ -5,11 +5,12 @@ import Tile from "../services/Tile.js";
  * Animated exit portal that changes when quota is met
  */
 export default class ExitPortal {
-    constructor(x, y, width, height) {
+    constructor(x, y, width, height, level = null) {
         this.x = x * Tile.SIZE;
         this.y = y * Tile.SIZE;
         this.width = width * Tile.SIZE;
         this.height = height * Tile.SIZE;
+        this.level = level; // Store level reference
 
         this.isUnlocked = false;
         this.pulseTime = 0;
@@ -18,6 +19,18 @@ export default class ExitPortal {
 
     unlock() {
         this.isUnlocked = true;
+
+        // Show message that exit is unlocked
+        if (this.level && this.level.messageDisplay) {
+            this.level.messageDisplay.showMessage(
+                "Exit is now open!",
+                4,
+                "#4CAF50" // Green color for success
+            );
+        }
+
+        // TODO: Play exit unlock sound here
+        // sounds.play('exit-unlock');
 
         // Create unlock particle burst
         for (let i = 0; i < 30; i++) {
@@ -106,7 +119,7 @@ export default class ExitPortal {
 
         const text = this.isUnlocked ? "EXIT" : "LOCKED";
         const centerX = this.x + this.width / 2;
-        const totalHeight = text.length * 16; // Total height of all letters
+        const totalHeight = text.length * 16;
         const startY = this.y + this.height / 2 - totalHeight / 2 + 8;
 
         // Draw each letter stacked vertically

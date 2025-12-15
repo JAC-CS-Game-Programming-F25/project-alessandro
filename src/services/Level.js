@@ -84,7 +84,8 @@ export default class Level {
                 exitTransition.x,
                 exitTransition.y,
                 exitTransition.width,
-                exitTransition.height
+                exitTransition.height,
+                this
             );
         }
 
