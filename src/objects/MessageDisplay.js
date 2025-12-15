@@ -81,13 +81,13 @@ export default class MessageDisplay {
             context.shadowBlur = 0;
 
             // Warning icon
-            context.font = "32px Arial";
+            context.font = "32px RobotoMono";
             context.textAlign = "center";
             context.fillStyle = msg.color;
             context.fillText("⚠️", canvas.width / 2, boxY + 35);
 
             // Message text
-            context.font = "bold 18px Arial";
+            context.font = "bold 18px RobotoMono";
             context.fillStyle = "#ffffff";
             context.fillText(msg.text, canvas.width / 2, boxY + 62);
 

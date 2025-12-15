@@ -35,7 +35,7 @@ export default class HUD {
 
         // Money amount
         context.fillStyle = "#4CAF50";
-        context.font = "bold 18px Arial";
+        context.font = "bold 18px RobotoMono";
         context.textAlign = "center";
         context.fillText(
             `$${Math.floor(this.level.displayedMoney)} / $${this.level.quota}`,
@@ -105,7 +105,7 @@ export default class HUD {
         const timeString = `${minutes}:${seconds.toString().padStart(2, "0")}`;
 
         context.fillStyle = isWarning ? "#f44336" : "#fff";
-        context.font = "bold 24px Arial";
+        context.font = "bold 24px RobotoMono";
         context.textAlign = "center";
         context.fillText(timeString, panelX + panelWidth / 2, panelY + 34);
     }

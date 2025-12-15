@@ -2,7 +2,7 @@ import Player from "../entities/Player.js";
 import Vector from "../../lib/Vector.js";
 import Room from "./Room.js";
 import TilesetManager from "./TilesetManager.js";
-import { timer, setCanvasSize } from "../globals.js";
+import { timer, setCanvasSize, QUOTA } from "../globals.js";
 import Tile from "./Tile.js";
 import MessageDisplay from "../objects/MessageDisplay.js";
 import ParticleSystem from "./ParticleSystem.js";
@@ -10,8 +10,6 @@ import ExitPortal from "../objects/ExitPortal.js";
 import Easing from "../../lib/Easing.js";
 
 export default class Level {
-    static QUOTA = 500;
-
     constructor() {
         this.rooms = new Map();
         this.currentRoom = null;
@@ -19,7 +17,7 @@ export default class Level {
         this.player = null;
         this.moneyCollected = 0;
         this.displayedMoney = 0;
-        this.quota = Level.QUOTA;
+        this.quota = QUOTA;
         this.tilesetManager = new TilesetManager();
 
         this.transitionCooldown = 0;

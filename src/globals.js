@@ -16,6 +16,14 @@ export let CANVAS_HEIGHT = 704;
 export const MENU_CANVAS_WIDTH = 800;
 export const MENU_CANVAS_HEIGHT = 600;
 
+export const PAINTING_VALUE = 200;
+export const SCULPTURE_VALUE = 1000;
+export const ARTIFACT_VALUE = 500;
+export const SOUVENIR_VALUE = 50;
+
+export const QUOTA = 500;
+export const TIME_TO_COMPLETE = 600;
+
 export function setCanvasSize(width, height) {
     CANVAS_WIDTH = width;
     CANVAS_HEIGHT = height;

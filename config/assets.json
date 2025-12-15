@@ -103,6 +103,15 @@
             "height": 64
         }
     ],
-    "fonts": [],
+    "fonts": [
+        {
+            "name": "Orbitron",
+            "path": "./assets/fonts/Orbitron.ttf"
+        },
+        {
+            "name": "RobotoMono",
+            "path": "./assets/fonts/RobotoMono.ttf"
+        }
+    ],
     "sounds": []
 }
