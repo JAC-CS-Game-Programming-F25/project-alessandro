@@ -133,7 +133,6 @@ export default class Level {
         }
 
         this.currentRoom.onItemCollected = (item) => {
-            sounds.play(SoundName.MoneyPickup);
             const interactables =
                 this.currentRoom.interactableManager.interactables;
             const itemData = interactables[item.index];

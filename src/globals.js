@@ -22,7 +22,7 @@ export const ARTIFACT_VALUE = 500;
 export const SOUVENIR_VALUE = 50;
 
 export const QUOTA = 1000;
-export const TIME_TO_COMPLETE = 10;
+export const TIME_TO_COMPLETE = 60;
 
 export function setCanvasSize(width, height) {
     CANVAS_WIDTH = width;

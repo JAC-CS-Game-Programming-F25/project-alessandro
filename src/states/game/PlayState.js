@@ -399,34 +399,20 @@ export default class PlayState extends State {
     }
 
     onGameOver(reason) {
-        console.log(
-            "[PlayState] onGameOver called with reason:",
-            reason,
-            "gameEnded:",
-            this.gameEnded
-        );
-
         if (this.gameEnded) {
-            console.log(
-                "[PlayState] onGameOver - gameEnded already true, returning early"
-            );
             return;
         }
 
-        console.log("[PlayState] onGameOver - setting gameEnded = true");
         this.gameEnded = true;
 
-        console.log("[PlayState] onGameOver - stopping sounds");
         sounds.stop(SoundName.InGame);
         if (this.isWarningPlaying) {
             sounds.stop(SoundName.ClockTick);
             this.isWarningPlaying = false;
         }
 
-        console.log("[PlayState] onGameOver - deleting save");
         SaveManager.deleteSave();
 
-        console.log("[PlayState] onGameOver - changing to transition state");
         stateMachine.change(GameStateName.Transition, {
             fromState: this,
             toState: stateMachine.states[GameStateName.GameOver],
@@ -437,7 +423,6 @@ export default class PlayState extends State {
                 timeLeft: this.timeRemaining,
             },
         });
-        console.log("[PlayState] onGameOver - stateMachine.change completed");
     }
 
     onVictory() {

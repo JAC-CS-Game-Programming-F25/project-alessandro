@@ -29,7 +29,7 @@ export default class PlayerMovingState extends State {
         };
 
         this.footstepTimer = 0;
-        this.footstepInterval = 0.3;
+        this.footstepInterval = 0.3 * (player.speed / speed);
     }
 
     get collisionLayer() {
@@ -68,6 +68,7 @@ export default class PlayerMovingState extends State {
         const room = this.player.level.currentRoom;
 
         if (room.interactableManager.canInteract()) {
+            sounds.play(SoundName.MoneyPickup);
             this.player.changeState(PlayerStateName.Stealing);
 
             const itemData = room.interactableManager.collect();

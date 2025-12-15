@@ -80,6 +80,8 @@ export default class PlayerIdlingState extends State {
         const room = this.player.level.currentRoom;
 
         if (room.interactableManager.canInteract()) {
+            sounds.play(SoundName.MoneyPickup);
+
             this.player.changeState(PlayerStateName.Stealing);
 
             const itemData = room.interactableManager.collect();
