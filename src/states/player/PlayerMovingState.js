@@ -7,6 +7,7 @@ import Tile from "../../services/Tile.js";
 import GameEntity from "../../entities/GameEntity.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import SoundName from "../../enums/SoundName.js";
+import Hitbox from "../../../lib/Hitbox.js";
 
 export default class PlayerMovingState extends State {
     constructor(player, speed, animationTime) {
@@ -96,6 +97,8 @@ export default class PlayerMovingState extends State {
             input.isKeyHeld(Input.KEYS.D);
 
         if (!isMoving) {
+            this.player.velocity.x = 0;
+            this.player.velocity.y = 0;
             this.onNoInput();
             return;
         }
@@ -117,6 +120,7 @@ export default class PlayerMovingState extends State {
             this.player.direction = Direction.Right;
         }
 
+        // Normalize diagonal movement
         if (this.player.velocity.x !== 0 && this.player.velocity.y !== 0) {
             const length = Math.hypot(
                 this.player.velocity.x,
@@ -133,25 +137,40 @@ export default class PlayerMovingState extends State {
         const nextY =
             this.player.canvasPosition.y + this.player.velocity.y * dt;
 
-        if (this.willCollide(nextX, this.player.canvasPosition.y)) {
+        // Check X-axis collision using Hitbox
+        if (this.checkTileCollision(nextX, this.player.canvasPosition.y)) {
             this.player.velocity.x = 0;
         }
 
-        if (this.willCollide(this.player.canvasPosition.x, nextY)) {
+        // Check Y-axis collision using Hitbox
+        if (this.checkTileCollision(this.player.canvasPosition.x, nextY)) {
             this.player.velocity.y = 0;
         }
     }
 
     onNoInput() {
-        // Default: do nothing
+        
     }
 
-    willCollide(x, y) {
+    /**
+     * Check if the player's hitbox would collide with tiles at a given position
+     * Uses the Hitbox class from the course library for AABB collision detection
+     */
+    checkTileCollision(x, y) {
         const hitboxOffsetX = 4;
         const hitboxOffsetY = GameEntity.HEIGHT / 4;
         const hitboxWidth = 24;
         const hitboxHeight = 16;
 
+        // Create a test hitbox at the proposed position
+        const testHitbox = new Hitbox(
+            x + hitboxOffsetX,
+            y + hitboxOffsetY,
+            hitboxWidth,
+            hitboxHeight
+        );
+
+        // Check the four corners of the hitbox against tiles
         const left = Math.floor((x + hitboxOffsetX) / Tile.SIZE);
         const right = Math.floor(
             (x + hitboxOffsetX + hitboxWidth - 1) / Tile.SIZE
@@ -161,12 +180,33 @@ export default class PlayerMovingState extends State {
             (y + hitboxOffsetY + hitboxHeight - 1) / Tile.SIZE
         );
 
-        const hasCollision =
-            this.collisionLayer.getTile(left, top) !== null ||
-            this.collisionLayer.getTile(right, top) !== null ||
-            this.collisionLayer.getTile(left, bottom) !== null ||
-            this.collisionLayer.getTile(right, bottom) !== null;
+        const tilesToCheck = [
+            { x: left, y: top },
+            { x: right, y: top },
+            { x: left, y: bottom },
+            { x: right, y: bottom },
+        ];
 
-        return hasCollision;
+        // Check collision with each tile using Hitbox.didCollide()
+        for (const tilePos of tilesToCheck) {
+            const tile = this.collisionLayer.getTile(tilePos.x, tilePos.y);
+
+            if (tile !== null) {
+                // Create a hitbox for this tile
+                const tileHitbox = new Hitbox(
+                    tilePos.x * Tile.SIZE,
+                    tilePos.y * Tile.SIZE,
+                    Tile.SIZE,
+                    Tile.SIZE
+                );
+
+                // Use Hitbox class's didCollide() method for collision detection
+                if (testHitbox.didCollide(tileHitbox)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

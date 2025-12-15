@@ -12,6 +12,7 @@ import Tile from "../services/Tile.js";
 import PlayerCrouchingState from "../states/player/PlayerCrouchingState.js";
 import PlayerCaughtState from "../states/player/PlayerCaughtState.js";
 import PlayerStealingState from "../states/player/PlayerStealingState.js";
+import Hitbox from "../../lib/Hitbox.js";
 
 export default class Player extends GameEntity {
     /**
@@ -30,6 +31,13 @@ export default class Player extends GameEntity {
         this.velocity = new Vector(0, 0);
         this.speed = 100;
         this.isCrouching = false;
+
+        this.hitbox = new Hitbox(
+            this.canvasPosition.x + 4,
+            this.canvasPosition.y + 32,
+            24,
+            16
+        );
 
         this.stateMachine = this.initializeStateMachine();
 
@@ -60,6 +68,13 @@ export default class Player extends GameEntity {
 
         this.currentAnimation.update(dt);
         this.currentFrame = this.currentAnimation.getCurrentFrame();
+
+        this.hitbox.set(
+            this.canvasPosition.x + 4,
+            this.canvasPosition.y + 32,
+            24,
+            16
+        );
     }
 
     render() {
