@@ -37,19 +37,19 @@ The player shall be able to:
 
 ### Game States
 
-![State Diagram](./assets/images/StateDiagram.png)
+![State Diagram](./assets/images/diagrams/StateDiagram.png)
 
 TitleScreen → Instructions (optional) → Play → (Victory or GameOver) → back to TitleScreen. Pause state accessible during Play.
 
 ### Player States
 
-![Player State Diagram](./assets/images/PlayerStateDiagram.png)
+![Player State Diagram](./assets/images/diagrams/PlayerStateDiagram.png)
 
 Idle ↔ Walking ↔ Crouching (based on input)
 
 ### Guard States
 
-![Guard State Diagram](./assets/images/GuardStateDiagram.png)
+![Guard State Diagram](./assets/images/diagrams/GuardStateDiagram.png)
 
 **Patrol Guard**: Patrol → Alert (player detected)  
 **Stationary Guard**: Idle/Rotating ↔ Alert (player detected)
